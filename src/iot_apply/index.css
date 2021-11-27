@@ -1,0 +1,11 @@
+.margin {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  #iot-apply-title {
+    margin: 20px 20px;
+    text-align: center;
+    font-family: "Jua", sans-serif;
+    font-size: 28px;
+  }
