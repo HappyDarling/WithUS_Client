@@ -49,8 +49,7 @@
     <!-- KaKao API -->
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>
-      require("dotenv");
-      Kakao.init(process.env.KAKAO_API_KEY);
+      Kakao.init("0348de571d1ba6edfdf932bbba5451bd");
       if (Kakao.Auth.getAccessToken()) {
         setIsLogin(true);
       }

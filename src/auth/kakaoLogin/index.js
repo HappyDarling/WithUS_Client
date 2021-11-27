@@ -2,11 +2,12 @@ import React, { useState } from "react";
 
 const { Kakao } = window;
 
+// Login With KAKAO
 const loginWithKakao = () => {
   try {
     return new Promise((resolve, reject) => {
       if (!Kakao) {
-        reject("ERROR");
+        reject("KAKAO 인스턴스를 찾을 수 없습니다.");
       }
       Kakao.Auth.login({
         success: (auth) => {
@@ -47,4 +48,20 @@ const KakaoLogin = () => {
   );
 };
 
-export default KakaoLogin;
+// Logout With KAKAO
+const KakaoLogout = () => {
+  try {
+    return new Promise((resolve, reject) => {
+      if (!Kakao) {
+        reject("KAKAO 인스턴스를 찾을 수 없습니다.");
+      }
+      Kakao.Auth.logout(() => {
+        window.history.go(0);
+      });
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export { KakaoLogin, KakaoLogout };

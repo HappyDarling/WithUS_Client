@@ -1,15 +1,24 @@
 import "./index.css";
 import { ReactComponent as AccountSVG } from "./images/person-circle.svg";
-import React, { useState } from "react";
-import { Modal, Button } from "antd";
-import KakaoLogin from "../auth/kakaoLogin/index";
+import React, { useState, useEffect } from "react";
+import { Popover, Modal, Button } from "antd";
+import { KakaoLogin, KakaoLogout } from "../auth/kakaoLogin/index";
 import GoogleLogin from "react-google-login";
 require("dotenv");
 
-function Header(props) {
-  // Login State 관리
-  const isLogin = props.isLogin;
+function Header() {
+  const { Kakao } = window;
 
+  // Login State 관리
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    if (Kakao.Auth.getAccessToken()) {
+      setIsLogin(true);
+    }
+  });
+
+  // API KEY
   const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
   // 비 로그인 상태에서 로그인 버튼을 클릭시 표시될 로고 스타일
@@ -35,6 +44,24 @@ function Header(props) {
   const onFailureGoogle = (err) => {
     console.error(err);
   };
+
+  // Popover Text 관리
+  const text = <span>Title</span>;
+  const content = (
+    <div>
+      <div>
+        <a id="custom-login-btn" onClick={KakaoLogout}>
+          <img
+            src="./images/snsLogin/kakao.png"
+            width="222"
+            width="300px"
+            height="70px"
+            style={login_view_logoStyle}
+          />
+        </a>
+      </div>
+    </div>
+  );
 
   // 비 로그인 상태의 로그인뷰
   const loginView_notLogin = (
@@ -92,7 +119,25 @@ function Header(props) {
   );
 
   // 로그인 상태의 로그인뷰
-  const loginView_Login = <div>로그인</div>;
+  const loginView_Login = (
+    <div>
+      <div className="col-md-9" id="account">
+        <div className="header-account">
+          <Popover
+            placement="bottom"
+            title={text}
+            content={content}
+            trigger="click"
+          >
+            <Button type="primary" onClick={showModal} size="large" danger>
+              <AccountSVG />
+              <span id="login-text">내정보</span>
+            </Button>
+          </Popover>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div>
@@ -115,7 +160,7 @@ function Header(props) {
               {/* <!-- /LOGO --> */}
 
               {/* <!-- ACCOUNT --> */}
-              {isLogin ? loginView_notLogin : loginView_Login}
+              {isLogin ? loginView_Login : loginView_notLogin}
               {/* <!-- ACCOUNT --> */}
             </div>
             {/* <!-- row --> */}
