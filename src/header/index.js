@@ -1,9 +1,11 @@
 import "./index.css";
+import axios from "axios";
+import SyncRequest from "sync-request";
 import { ReactComponent as AccountSVG } from "./images/person-circle.svg";
 import React, { useState, useEffect } from "react";
 import { Popover, Modal, Button } from "antd";
 import { KakaoLogin, KakaoLogout } from "../auth/kakaoLogin/index";
-import GoogleLogin from "react-google-login";
+import GoogleLogin, { GoogleLogout } from "react-google-login";
 require("dotenv");
 
 function Header() {
@@ -13,19 +15,39 @@ function Header() {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
+    // 카카오 로그인 유지 (자체 함수 Validation)
     if (Kakao.Auth.getAccessToken()) {
+      console.log("로그인 유지");
       setIsLogin(true);
+    }
+    // 구글 로그인 유지 (Sync 통신으로 Access Token Validation)
+    else if (JSON.parse(sessionStorage.getItem("user"))) {
+      var res = SyncRequest(
+        "POST",
+        `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${
+          JSON.parse(sessionStorage.getItem("user"))["accessToken"]
+        }`
+      );
+
+      if (res.statusCode == 200) {
+        setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
     }
   });
 
   // API KEY
-  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+  const REACT_APP_GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
   // 비 로그인 상태에서 로그인 버튼을 클릭시 표시될 로고 스타일
   let login_view_logoStyle = {
     display: "block",
     margin: "0px auto",
   };
+
+  // 내 정보 Style
+  let myInfo = { textAlign: "center", fontFamily: "Jua", fontSize: "20px" };
 
   // Modal의 useState 관리
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -38,15 +60,22 @@ function Header() {
   };
 
   const onSuccessGoogle = (auth) => {
+    sessionStorage.setItem("user", JSON.stringify(auth));
     console.log(auth);
+    window.history.go(0);
   };
 
   const onFailureGoogle = (err) => {
     console.error(err);
   };
 
+  const onLogoutGoogle = (auth) => {
+    sessionStorage.setItem("user", null);
+    window.history.go(0);
+  };
+
   // Popover Text 관리
-  const text = <span>Title</span>;
+  const text = <div style={myInfo}>Info</div>;
   const content = (
     <div>
       <div>
@@ -59,6 +88,10 @@ function Header() {
             style={login_view_logoStyle}
           />
         </a>
+        <GoogleLogout
+          clientId={REACT_APP_GOOGLE_API_KEY}
+          onLogoutSuccess={onLogoutGoogle}
+        />
       </div>
     </div>
   );
@@ -85,8 +118,9 @@ function Header() {
             footer={[]}
           >
             <p>
+              {/* Google Login API */}
               <GoogleLogin
-                clientId={GOOGLE_API_KEY}
+                clientId={REACT_APP_GOOGLE_API_KEY}
                 render={(renderProps) => (
                   <a onClick={renderProps.onClick}>
                     <img

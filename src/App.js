@@ -3,7 +3,7 @@ import "antd/dist/antd.css";
 import IndexPage from "./index/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
 function App() {
   return (

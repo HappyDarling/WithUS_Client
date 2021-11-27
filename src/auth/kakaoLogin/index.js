@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const { Kakao } = window;
 
@@ -11,9 +11,7 @@ const loginWithKakao = () => {
       }
       Kakao.Auth.login({
         success: (auth) => {
-          // auth 정보 디버그 용도의 콘솔 출력
-          console.log(auth);
-          sessionStorage.setItem("user", auth);
+          sessionStorage.setItem("user", JSON.stringify(auth));
           window.history.go(0);
         },
         fail: (error) => {
@@ -56,6 +54,7 @@ const KakaoLogout = () => {
         reject("KAKAO 인스턴스를 찾을 수 없습니다.");
       }
       Kakao.Auth.logout(() => {
+        sessionStorage.setItem("user", null);
         window.history.go(0);
       });
     });
