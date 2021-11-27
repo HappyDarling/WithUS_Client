@@ -4,8 +4,19 @@ import IndexPage from "./index/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
 import { Link, Route, Switch } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 function App() {
+  const [isLogin, setIsLogin] = useState(false);
+
+  useEffect(() => {
+    console.log("useEffect");
+    if (sessionStorage.getItem("user") !== null) {
+      console.log("useEffect2");
+      setIsLogin(true);
+    }
+  });
+
   return (
     <div>
       <div id="header">
@@ -17,10 +28,7 @@ function App() {
       <div id="body">
         <Switch>
           <Route exact="true" path={"/"}>
-            <IndexPage />
-          </Route>
-          <Route exact="true" path={"/result"}>
-            <IndexPage />
+            <IndexPage islogin={isLogin} />
           </Route>
         </Switch>
       </div>
