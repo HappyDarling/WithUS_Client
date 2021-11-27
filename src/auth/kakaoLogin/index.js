@@ -12,6 +12,7 @@ const loginWithKakao = () => {
       Kakao.Auth.login({
         success: (auth) => {
           sessionStorage.setItem("user", JSON.stringify(auth));
+          sessionStorage.setItem("auth", "kakao");
           window.history.go(0);
         },
         fail: (error) => {
@@ -55,6 +56,7 @@ const KakaoLogout = () => {
       }
       Kakao.Auth.logout(() => {
         sessionStorage.setItem("user", null);
+        sessionStorage.setItem("auth", null);
         window.history.go(0);
       });
     });

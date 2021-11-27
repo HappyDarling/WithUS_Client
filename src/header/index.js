@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { Popover, Modal, Button } from "antd";
 import { KakaoLogin, KakaoLogout } from "../auth/kakaoLogin/index";
 import GoogleLogin, { GoogleLogout } from "react-google-login";
+import { UserOutlined, MehOutlined, LogoutOutlined } from "@ant-design/icons";
 require("dotenv");
 
 function Header() {
@@ -27,6 +28,10 @@ function Header() {
             "profileImg",
             response["kakao_account"]["profile"]["profile_image_url"]
           );
+          // 이메일
+          sessionStorage.setItem("email", response["kakao_account"]["email"]);
+          // 이름
+          sessionStorage.setItem("name", response["properties"]["nickname"]);
         },
         fail: function (error) {
           console.error(error);
@@ -61,6 +66,8 @@ function Header() {
 
   // 내 정보 Style
   let myInfo = { textAlign: "center", fontFamily: "Jua", fontSize: "20px" };
+  // popover 버튼 Style
+  let btn = { width: "200px", marginTop: "10px" };
 
   // Modal의 useState 관리
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -74,6 +81,7 @@ function Header() {
 
   const onSuccessGoogle = (auth) => {
     sessionStorage.setItem("user", JSON.stringify(auth));
+    sessionStorage.setItem("auth", "google");
     console.log(auth);
     window.history.go(0);
   };
@@ -84,8 +92,35 @@ function Header() {
 
   const onLogoutGoogle = (auth) => {
     sessionStorage.setItem("user", null);
+    sessionStorage.setItem("auth", null);
     window.history.go(0);
   };
+
+  // 각 SNS별 로그아웃 기능
+  const googleLogout = (
+    <div>
+      <GoogleLogout
+        clientId={REACT_APP_GOOGLE_API_KEY}
+        render={(renderProps) => (
+          <a onClick={renderProps.onClick}>
+            <Button icon={<LogoutOutlined />} size="large" style={btn}>
+              로그아웃
+            </Button>
+          </a>
+        )}
+        onLogoutSuccess={onLogoutGoogle}
+      />
+    </div>
+  );
+  const kakaoLogout = (
+    <div>
+      <a id="custom-login-btn" onClick={KakaoLogout}>
+        <Button icon={<LogoutOutlined />} size="large" style={btn}>
+          로그아웃
+        </Button>
+      </a>
+    </div>
+  );
 
   // Popover Text 관리
   const text = <div style={myInfo}>Info</div>;
@@ -95,21 +130,20 @@ function Header() {
         <div className="box">
           <img src={sessionStorage.getItem("profileImg")} className="profile" />
         </div>
+        <div>
+          <div className="email_name">{sessionStorage.getItem("name")}</div>
+          <div className="email_name">{sessionStorage.getItem("email")}</div>
+        </div>
       </div>
-      <div>
-        <a id="custom-login-btn" onClick={KakaoLogout}>
-          <img
-            src="./images/snsLogin/kakao.png"
-            width="222"
-            width="300px"
-            height="70px"
-            style={login_view_logoStyle}
-          />
-        </a>
-        <GoogleLogout
-          clientId={REACT_APP_GOOGLE_API_KEY}
-          onLogoutSuccess={onLogoutGoogle}
-        />
+      <div id="myPage">
+        <Button icon={<MehOutlined />} size="large" style={btn}>
+          마이페이지
+        </Button>
+      </div>
+      <div id="logout">
+        {sessionStorage.getItem("auth") === "kakao"
+          ? kakaoLogout
+          : googleLogout}
       </div>
     </div>
   );
@@ -126,9 +160,13 @@ function Header() {
     <div>
       <div className="col-md-9" id="account">
         <div className="header-account">
-          <Button type="primary" onClick={showModal} size="large">
-            <AccountSVG />
-            <span id="login-text">로그인</span>
+          <Button
+            onClick={showModal}
+            icon={<UserOutlined />}
+            size="large"
+            style={btnCSS}
+          >
+            로그인
           </Button>
           <Modal
             title={
@@ -189,13 +227,12 @@ function Header() {
             trigger="click"
           >
             <Button
-              type="primary"
               onClick={showModal}
+              icon={<UserOutlined />}
               size="large"
               style={btnCSS}
             >
-              <AccountSVG />
-              <span id="login-text">내정보</span>
+              내정보
             </Button>
           </Popover>
         </div>
