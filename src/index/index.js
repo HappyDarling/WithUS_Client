@@ -16,13 +16,6 @@ function IndexPage() {
     background: "#364d79",
   };
 
-  const footerBanner1 = {
-    color: "aliceblue",
-  };
-  const footerBanner2 = {
-    color: "rgb(108, 108, 110)",
-  };
-
   const { Meta } = Card;
 
   return (
@@ -258,19 +251,19 @@ function IndexPage() {
         </div>
         <div id="banner">
           {/* <!-- 우울증 극복 프로그램 연결 --> */}
-          <div id="hot-deal" className="section">
+          <div id="footer-banner" class="section">
             {/* <!-- container --> */}
-            <div className="container">
+            <div class="container">
               {/* <!-- row --> */}
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="hot-deal">
-                    <h2 style={footerBanner1}>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="footer-banner-content">
+                    <h2 class="banner-txt1">
                       요즘 축축 처지고 의욕이 없어..
                     </h2>
-                    <p style={footerBanner2}>우울증이 의심되시나요?</p>
+                    <p class="banner-txt2">우울증이 의심되나요?</p>
                     <a
-                      className="primary-btn cta-btn"
+                      class="primary-btn cta-btn"
                       href="https://www.cyber1388.kr:447/"
                     >
                       사이버 상담센터 바로가기
