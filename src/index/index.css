@@ -9,7 +9,7 @@
   font-size: 28px;
 }
 
-#hot-deal.section {
+#footer-banner.section {
   padding: 40px 0px;
   margin: 30px 0px;
   background-color: #e4e7ed;
@@ -18,15 +18,21 @@
   background-repeat: no-repeat;
 }
 
-.hot-deal {
+.footer-banner-content {
+  padding-left: 40px;
   text-align: left;
 }
 
-.hot-deal p {
+.footer-banner-content h2 {
+  color: aliceblue;
+}
+
+.footer-banner-content p {
   text-transform: uppercase;
+  color: rgb(128, 128, 128);
   font-size: 24px;
 }
 
-.hot-deal .cta-btn {
+.footer-banner-content .cta-btn {
   margin-top: 15px;
 }
