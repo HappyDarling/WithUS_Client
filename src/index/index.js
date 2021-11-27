@@ -251,19 +251,19 @@ function IndexPage() {
         </div>
         <div id="banner">
           {/* <!-- 우울증 극복 프로그램 연결 --> */}
-          <div id="footer-banner" class="section">
+          <div id="footer-banner" className="section">
             {/* <!-- container --> */}
-            <div class="container">
+            <div className="container">
               {/* <!-- row --> */}
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="footer-banner-content">
-                    <h2 class="banner-txt1">
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="footer-banner-content">
+                    <h2 className="banner-txt1">
                       요즘 축축 처지고 의욕이 없어..
                     </h2>
-                    <p class="banner-txt2">우울증이 의심되나요?</p>
+                    <p className="banner-txt2">우울증이 의심되나요?</p>
                     <a
-                      class="primary-btn cta-btn"
+                      className="primary-btn cta-btn"
                       href="https://www.cyber1388.kr:447/"
                     >
                       사이버 상담센터 바로가기

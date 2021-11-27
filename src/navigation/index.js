@@ -10,7 +10,7 @@ function Navigation() {
           {/* <!-- NAV --> */}
           <ul className="main-nav nav navbar-nav">
             <li className="active">
-              <a href="#">메인</a>
+              <a href="/">메인</a>
             </li>
             <li>
               <a href="#">도움 요청</a>

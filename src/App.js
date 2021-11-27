@@ -4,6 +4,7 @@ import IndexPage from "./index/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
 import { Route, Switch } from "react-router-dom";
+import { Affix, Button } from "antd";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <div id="navigation">
         <Navigation />
       </div>
+
       <div id="body">
         <Switch>
           <Route exact="true" path={"/"}>
@@ -22,6 +24,11 @@ function App() {
         </Switch>
       </div>
       <div id="footer"></div>
+      <Affix offsetBottom={10} style={{ position: "absolute", right: 10 }}>
+        <Button type="primary" onClick={() => console.log("TALKBOT CLICK")}>
+          TALKBOT
+        </Button>
+      </Affix>
     </div>
   );
 }

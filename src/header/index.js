@@ -1,5 +1,4 @@
 import "./index.css";
-import axios from "axios";
 import SyncRequest from "sync-request";
 import { ReactComponent as AccountSVG } from "./images/person-circle.svg";
 import React, { useState, useEffect } from "react";
@@ -17,8 +16,22 @@ function Header() {
   useEffect(() => {
     // 카카오 로그인 유지 (자체 함수 Validation)
     if (Kakao.Auth.getAccessToken()) {
-      console.log("로그인 유지");
       setIsLogin(true);
+      Kakao.API.request({
+        url: "/v2/user/me",
+        success: function (response) {
+          // 서버에 저장할 항목
+          console.log(response);
+          // 프로필 사진
+          sessionStorage.setItem(
+            "profileImg",
+            response["kakao_account"]["profile"]["profile_image_url"]
+          );
+        },
+        fail: function (error) {
+          console.error(error);
+        },
+      });
     }
     // 구글 로그인 유지 (Sync 통신으로 Access Token Validation)
     else if (JSON.parse(sessionStorage.getItem("user"))) {
@@ -77,7 +90,12 @@ function Header() {
   // Popover Text 관리
   const text = <div style={myInfo}>Info</div>;
   const content = (
-    <div>
+    <div className="profileContainer">
+      <div className="OuterBox">
+        <div className="box">
+          <img src={sessionStorage.getItem("profileImg")} className="profile" />
+        </div>
+      </div>
       <div>
         <a id="custom-login-btn" onClick={KakaoLogout}>
           <img
@@ -96,19 +114,26 @@ function Header() {
     </div>
   );
 
+  // 로그인 버튼 CSS
+  const btnCSS = {
+    backgroundColor: "#f4f4f4",
+    color: "#012758",
+    borderColor: "#f4f4f4",
+  };
+
   // 비 로그인 상태의 로그인뷰
   const loginView_notLogin = (
     <div>
       <div className="col-md-9" id="account">
         <div className="header-account">
-          <Button type="primary" onClick={showModal} size="large" danger>
+          <Button type="primary" onClick={showModal} size="large">
             <AccountSVG />
             <span id="login-text">로그인</span>
           </Button>
           <Modal
             title={
               <img
-                src="./logo.png"
+                src="./logo_Login.png"
                 width="192px"
                 style={login_view_logoStyle}
               />
@@ -163,7 +188,12 @@ function Header() {
             content={content}
             trigger="click"
           >
-            <Button type="primary" onClick={showModal} size="large" danger>
+            <Button
+              type="primary"
+              onClick={showModal}
+              size="large"
+              style={btnCSS}
+            >
               <AccountSVG />
               <span id="login-text">내정보</span>
             </Button>
