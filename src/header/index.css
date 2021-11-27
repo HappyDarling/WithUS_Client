@@ -1,0 +1,30 @@
+#row {
+  line-height: 64px;
+}
+
+#header {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: #eae9e2;
+}
+
+#account {
+  height: 64px;
+}
+
+.header-logo {
+  float: left;
+}
+
+.header-account {
+  float: right;
+  vertical-align: middle;
+}
+
+.header-logo .header-account {
+  display: block;
+}
+
+#login-text {
+  padding-left: 5px;
+}
