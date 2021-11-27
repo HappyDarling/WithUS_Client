@@ -50,6 +50,9 @@
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script>
       Kakao.init("3ebf1b2418636b506f78bf65ea3b948c");
+      if (Kakao.Auth.getAccessToken()) {
+        setIsLogin(true);
+      }
     </script>
 
   <body>

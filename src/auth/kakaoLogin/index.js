@@ -1,4 +1,7 @@
+import React, { useState } from "react";
+
 const { Kakao } = window;
+
 const loginWithKakao = () => {
   try {
     return new Promise((resolve, reject) => {
@@ -7,7 +10,10 @@ const loginWithKakao = () => {
       }
       Kakao.Auth.login({
         success: (auth) => {
+          // auth 정보 디버그 용도의 콘솔 출력
           console.log(auth);
+          sessionStorage.setItem("user", auth);
+          window.history.go(0);
         },
         fail: (error) => {
           console.error(error);

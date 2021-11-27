@@ -4,10 +4,13 @@ import React, { useState } from "react";
 import { Modal, Button } from "antd";
 import KakaoLogin from "../auth/kakaoLogin/index";
 import GoogleLogin from "react-google-login";
+require("dotenv");
 
-function Header() {
-  const GOOGLE_API_KEY =
-    "869809387867-u4m7p0bji64928mgljadlq0a68pd3f02.apps.googleusercontent.com";
+function Header(props) {
+  // Login State 관리
+  const isLogin = props.isLogin;
+
+  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
   // 비 로그인 상태에서 로그인 버튼을 클릭시 표시될 로고 스타일
   let login_view_logoStyle = {
@@ -33,6 +36,64 @@ function Header() {
     console.error(err);
   };
 
+  // 비 로그인 상태의 로그인뷰
+  const loginView_notLogin = (
+    <div>
+      <div className="col-md-9" id="account">
+        <div className="header-account">
+          <Button type="primary" onClick={showModal} size="large" danger>
+            <AccountSVG />
+            <span id="login-text">로그인</span>
+          </Button>
+          <Modal
+            title={
+              <img
+                src="./logo.png"
+                width="192px"
+                style={login_view_logoStyle}
+              />
+            }
+            visible={isModalVisible}
+            onCancel={handleCancel}
+            footer={[]}
+          >
+            <p>
+              <GoogleLogin
+                clientId={GOOGLE_API_KEY}
+                render={(renderProps) => (
+                  <a onClick={renderProps.onClick}>
+                    <img
+                      width="300px"
+                      height="70px"
+                      src="./images/snsLogin/google.png"
+                      style={login_view_logoStyle}
+                    />
+                  </a>
+                )}
+                onSuccess={onSuccessGoogle}
+                onFailure={onFailureGoogle}
+              />
+            </p>
+            <p>
+              <KakaoLogin />
+            </p>
+            <p>
+              <img
+                src="./images/snsLogin/naver.png"
+                width="300px"
+                height="70px"
+                style={login_view_logoStyle}
+              />
+            </p>
+          </Modal>
+        </div>
+      </div>
+    </div>
+  );
+
+  // 로그인 상태의 로그인뷰
+  const loginView_Login = <div>로그인</div>;
+
   return (
     <div>
       {/* <!-- HEADER --> */}
@@ -46,7 +107,7 @@ function Header() {
               {/* <!-- LOGO --> */}
               <div className="col-md-3">
                 <div className="header-logo">
-                  <a href="#" className="logo">
+                  <a href="/" className="logo">
                     <img src="./logo.png" width="192px" />
                   </a>
                 </div>
@@ -54,60 +115,7 @@ function Header() {
               {/* <!-- /LOGO --> */}
 
               {/* <!-- ACCOUNT --> */}
-              <div className="col-md-9" id="account">
-                <div className="header-account">
-                  <Button
-                    type="primary"
-                    onClick={showModal}
-                    size="large"
-                    danger
-                  >
-                    <AccountSVG />
-                    <span id="login-text">로그인</span>
-                  </Button>
-                  <Modal
-                    title={
-                      <img
-                        src="./logo.png"
-                        width="192px"
-                        style={login_view_logoStyle}
-                      />
-                    }
-                    visible={isModalVisible}
-                    onCancel={handleCancel}
-                    footer={[]}
-                  >
-                    <p>
-                      <GoogleLogin
-                        clientId={GOOGLE_API_KEY}
-                        render={(renderProps) => (
-                          <a onClick={renderProps.onClick}>
-                            <img
-                              width="300px"
-                              height="70px"
-                              src="./images/snsLogin/google.png"
-                              style={login_view_logoStyle}
-                            />
-                          </a>
-                        )}
-                        onSuccess={onSuccessGoogle}
-                        onFailure={onFailureGoogle}
-                      />
-                    </p>
-                    <p>
-                      <KakaoLogin />
-                    </p>
-                    <p>
-                      <img
-                        src="./images/snsLogin/naver.png"
-                        width="300px"
-                        height="70px"
-                        style={login_view_logoStyle}
-                      />
-                    </p>
-                  </Modal>
-                </div>
-              </div>
+              {isLogin ? loginView_notLogin : loginView_Login}
               {/* <!-- ACCOUNT --> */}
             </div>
             {/* <!-- row --> */}
