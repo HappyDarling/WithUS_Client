@@ -3,9 +3,9 @@
 ===========================================================*/
 
 #navigation {
-  background: #fff;
-  border-bottom: 2px solid #e4e7ed;
-  border-top: 3px solid #d10024;
+  background: #f4f4f4;
+  border-bottom: 1px solid #9aa1aa;
+  /*border-top: 3px solid #012758;*/
 }
 
 a {
@@ -27,7 +27,8 @@ a {
 .main-nav > li > a:hover,
 .main-nav > li > a:focus,
 .main-nav > li.active > a {
-  color: #d10024;
+  color: #012758;
+  font-weight: bold;
   background-color: transparent;
 }
 
@@ -36,7 +37,7 @@ a {
   display: block;
   width: 0%;
   height: 2px;
-  background-color: #d10024;
+  background-color: #012758;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
 }
