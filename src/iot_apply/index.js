@@ -1,13 +1,7 @@
 import "./index.css";
+import { Button } from 'antd';
 
 function IndexPage() {
-  const contentStyle = {
-    height: "240px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-  };
 
   return (
     <div>
@@ -16,8 +10,11 @@ function IndexPage() {
         <div id="iot-apply-title">
             <p>IOT 신청하기</p>
         </div>
-        <div>
-            사진
+        <div id="iot-img">
+            <img src="./images/iot_img.png" alt="iot 사진"></img>
+        </div>
+        <div id="iot-apply-button">
+            <Button>신청하기</Button>
         </div>
       </div>
     </div>
