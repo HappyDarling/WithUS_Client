@@ -9,7 +9,7 @@ function Navigation() {
         <div className="container">
           {/* <!-- NAV --> */}
           <ul className="main-nav nav navbar-nav">
-            <li className="active">
+            <li>
               <a href="/">메인</a>
             </li>
             <li>
@@ -19,7 +19,7 @@ function Navigation() {
               <a href="#">도와 주기</a>
             </li>
             <li>
-              <a href="#">IOT 신청</a>
+              <a href="/apply">IOT 신청</a>
             </li>
             <li>
               <a href="#">회원 관리</a>

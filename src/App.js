@@ -4,6 +4,7 @@ import IndexPage from "./index/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
 import Help_board from "./help_board/index";
+import Iot_apply from "./iot_apply/index";
 import { Link, Route, Switch } from "react-router-dom";
 
 function App() {
@@ -26,6 +27,10 @@ function App() {
           {/* 도움 요청 게시판 */}
           <Route exact="true"path={"/ndhelp"}>
             <Help_board />
+          </Route>
+          {/* iot 신청 */}
+          <Route exact="true"path={"/apply"}>
+            <Iot_apply />
           </Route>
         </Switch>
       </div>
