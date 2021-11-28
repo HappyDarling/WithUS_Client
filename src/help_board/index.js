@@ -1,4 +1,5 @@
 import "./index.css";
+import { Button } from 'antd';
 import { Row, Col, Card, Avatar } from "antd";
 import { Input, Space } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
@@ -39,6 +40,11 @@ function IndexPage() {
     <div>
       {/* <!-- container --> */}
       <div className="container">
+        <div id="help-card-header">
+          <div id="help-title">
+            도움 요청 게시판
+          </div>
+        </div>
         {/* 도움 요청 게시판의 카테고리 */}
         <div id="categories">
             <div id="categories-icon">
@@ -53,16 +59,21 @@ function IndexPage() {
                 </a>
             </div>
         </div>
-        {/* 도움 요청 게시글들 (카드 뷰) */}
-        <div id="help-card">
-          <div id="help-card-title">
-            <p>도움 요청 게시판</p>
-          </div>
+        {/* 도움 요청 게시글들 (카드 뷰) */}        
+        <div id="help-card">          
           <div className="site-card-wrapper">
+            <div id="write-button">
+              <Button
+                type="primary"
+                href="#"
+                size="large"
+              >
+                <span>글 쓰기</span>
+              </Button>
+            </div>
             <Row gutter={16}>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -84,7 +95,6 @@ function IndexPage() {
               </Col>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -106,7 +116,6 @@ function IndexPage() {
               </Col>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -131,7 +140,6 @@ function IndexPage() {
             <Row gutter={16}>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -153,7 +161,6 @@ function IndexPage() {
               </Col>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -175,7 +182,6 @@ function IndexPage() {
               </Col>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -200,7 +206,6 @@ function IndexPage() {
             <Row gutter={16}>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -222,7 +227,6 @@ function IndexPage() {
               </Col>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
@@ -244,7 +248,6 @@ function IndexPage() {
               </Col>
               <Col span={8}>
                 <Card
-                  style={{ width: 300 }}
                   cover={
                     <img
                       alt="example"
