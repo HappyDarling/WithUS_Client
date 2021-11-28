@@ -52,10 +52,13 @@ function IndexPage() {
                     <img src="./images/icon/icon_elderly.png" alt="노인" />
                 </a>
                 <a href="#" className="icon">
-                    <img src="./images/icon/icon_disabled.png" width="100px" />
+                    <img src="./images/icon/icon_disabled.png" alt="장애인" width="100px" />
                 </a>
                 <a href="#" className="icon">
-                    <img src="./images/icon/icon_children.png" width="100px" />
+                    <img src="./images/icon/icon_children.png" alt="어린이" width="100px" />
+                </a>
+                <a href="#" className="icon">
+                    <img src="./images/icon/icon_lonley.png" alt="고독" width="100px" />
                 </a>
             </div>
         </div>
