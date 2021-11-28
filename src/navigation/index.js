@@ -9,7 +9,7 @@ function Navigation() {
         <div className="container">
           {/* <!-- NAV --> */}
           <ul className="main-nav nav navbar-nav">
-            <li className="active">
+            <li>
               <a href="/">메인</a>
             </li>
             <li>
