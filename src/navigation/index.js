@@ -15,7 +15,7 @@ function Navigation() {
               <a href="/">메인</a>
             </li>
             <li className={parse()["pathname"] === "/ndhelp" ? "active" : ""}>
-              <a href="#">도움 요청</a>
+              <a href="/ndhelp">도움 요청</a>
             </li>
             <li className={parse()["pathname"] === "/gvhelp" ? "active" : ""}>
               <a href="/gvhelp">도와 주기</a>
@@ -23,7 +23,7 @@ function Navigation() {
             <li
               className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
             >
-              <a href="#">IOT 신청</a>
+              <a href="/apply">IOT 신청</a>
             </li>
             <li
               className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
