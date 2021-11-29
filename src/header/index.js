@@ -35,6 +35,7 @@ function Header() {
         },
         fail: function (error) {
           console.error(error);
+          KakaoLogout();
         },
       });
     }

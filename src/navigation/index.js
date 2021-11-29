@@ -1,4 +1,5 @@
 import "./index.css";
+import { Link } from "react-router-dom";
 var parse = require("url-parse");
 
 function Navigation() {
@@ -12,23 +13,23 @@ function Navigation() {
           {/* <!-- NAV --> */}
           <ul className="main-nav nav navbar-nav">
             <li className={parse()["pathname"] === "/" ? "active" : ""}>
-              <a href="/">메인</a>
+              <Link to="/">메인</Link>
             </li>
             <li className={parse()["pathname"] === "/ndhelp" ? "active" : ""}>
-              <a href="/ndhelp">도움 요청</a>
+              <Link to="/ndhelp">도움 요청</Link>
             </li>
             <li className={parse()["pathname"] === "/gvhelp" ? "active" : ""}>
-              <a href="/gvhelp">도와 주기</a>
+              <Link to="/gvhelp">도와 주기</Link>
             </li>
             <li
               className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
             >
-              <a href="/apply">IOT 신청</a>
+              <Link to="/apply">IOT 신청</Link>
             </li>
             <li
               className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
             >
-              <a href="#">회원 관리</a>
+              <Link to="#">회원 관리</Link>
             </li>
           </ul>
           {/* <!-- /NAV --> */}

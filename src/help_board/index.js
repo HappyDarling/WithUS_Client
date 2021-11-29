@@ -1,4 +1,5 @@
 import "./index.css";
+import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { Row, Col, Card, Avatar } from "antd";
 import { Input, Space } from "antd";
@@ -76,8 +77,8 @@ function IndexPage() {
         <div id="help-card">
           <div className="site-card-wrapper">
             <div id="write-button">
-              <Button type="primary" href="/ndhelp/write" size="large">
-                <span>글 쓰기</span>
+              <Button type="primary" size="large">
+                <Link to="/write">글 쓰기</Link>
               </Button>
             </div>
             <Row gutter={16}>
