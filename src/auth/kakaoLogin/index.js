@@ -12,7 +12,6 @@ const loginWithKakao = () => {
       Kakao.Auth.login({
         success: (auth) => {
           sessionStorage.setItem("user", JSON.stringify(auth));
-          sessionStorage.setItem("auth", "kakao");
           window.history.go(0);
         },
         fail: (error) => {
@@ -55,8 +54,7 @@ const KakaoLogout = () => {
         reject("KAKAO 인스턴스를 찾을 수 없습니다.");
       }
       Kakao.Auth.logout(() => {
-        sessionStorage.setItem("user", null);
-        sessionStorage.setItem("auth", null);
+        sessionStorage.clear();
         window.history.go(0);
       });
     });

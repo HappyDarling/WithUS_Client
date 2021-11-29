@@ -1,6 +1,5 @@
 import "./index.css";
 import SyncRequest from "sync-request";
-import { ReactComponent as AccountSVG } from "./images/person-circle.svg";
 import React, { useState, useEffect } from "react";
 import { Popover, Modal, Button } from "antd";
 import { KakaoLogin, KakaoLogout } from "../auth/kakaoLogin/index";
@@ -32,6 +31,7 @@ function Header() {
           sessionStorage.setItem("email", response["kakao_account"]["email"]);
           // 이름
           sessionStorage.setItem("name", response["properties"]["nickname"]);
+          sessionStorage.setItem("auth", "kakao");
         },
         fail: function (error) {
           console.error(error);
@@ -49,6 +49,7 @@ function Header() {
 
       if (res.statusCode == 200) {
         setIsLogin(true);
+        sessionStorage.setItem("auth", "google");
       } else {
         setIsLogin(false);
       }
@@ -81,7 +82,6 @@ function Header() {
 
   const onSuccessGoogle = (auth) => {
     sessionStorage.setItem("user", JSON.stringify(auth));
-    sessionStorage.setItem("auth", "google");
     console.log(auth);
     window.history.go(0);
   };
@@ -91,8 +91,7 @@ function Header() {
   };
 
   const onLogoutGoogle = (auth) => {
-    sessionStorage.setItem("user", null);
-    sessionStorage.setItem("auth", null);
+    sessionStorage.clear();
     window.history.go(0);
   };
 
