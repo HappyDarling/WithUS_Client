@@ -1,4 +1,5 @@
 import "./index.css";
+import SyncRequest from "sync-request";
 import React, { useState } from "react";
 import DaumPostCode from "react-daum-postcode";
 import { Drawer, Row, Col, Form, Input, Button, Select } from "antd";
@@ -11,7 +12,7 @@ function WritePage() {
   const [state, setState] = useState(false);
 
   // Addr 변수 관리할 state
-  const [addr, setAddr] = useState("");
+  const [addr1, setAddr1] = useState("");
 
   // Addr Drawer 관리 함수
   const showDrawer = () => {
@@ -22,32 +23,44 @@ function WritePage() {
   };
 
   // 게시글 등록 Submit 함수
-  const onPostFinish = (values) => {
+  const onPostFinish = async (values) => {
+    values.addr1 = addr1;
+
+    var res = SyncRequest(
+      "POST",
+      `https://cors-anywhere.herokuapp.com/http://api.vworld.kr/req/address?service=address&request=getcoord&address=${encodeURI(
+        addr1
+      )}&type=road&key=${process.env.REACT_APP_VWorld_API_KEY}`
+    );
+
+    if (res.status == "OK") {
+      console.log(res.result.point.x);
+      console.log(res.result.point.y);
+    } else {
+      console.log(res.body);
+    }
+
     console.log("Received values of form: ", values);
   };
 
-  // Addr Submit 함수
-  const handleAddrFinish = (data) => {
-    console.log(data.addressEnglish);
-    let fullAddress = data.address;
-    let extraAddress = "";
-    if (data.addressType === "R") {
-      if (data.bname !== "") {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== "") {
-        extraAddress +=
-          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
-    }
-    console.log(fullAddress);
-    onClose();
-    setAddr(fullAddress);
-  };
+  // Drawer - Find PostCode
+  const FindAddr = () => {
+    // Addr Submit 함수
+    const handleAddrFinish = (data) => {
+      console.log(data.roadAddress);
+      onClose();
+      setAddr1(data.roadAddress);
+    };
 
-  const drawerStyle = {
-    height: "800px",
+    const drawerStyle = {
+      height: "800px",
+    };
+
+    return (
+      <Form>
+        <DaumPostCode onComplete={handleAddrFinish} style={drawerStyle} />
+      </Form>
+    );
   };
 
   return (
@@ -59,16 +72,14 @@ function WritePage() {
         visible={state}
         bodyStyle={{ paddingBottom: 80 }}
       >
-        <Form>
-          <DaumPostCode onComplete={handleAddrFinish} style={drawerStyle} />
-        </Form>
+        <FindAddr />
       </Drawer>
       <div id="layout">
         <Form onFinish={onPostFinish}>
           <Input.Group>
             <Row gutter={8}>
               <Col span={12}>
-                <Form.Item name="title">
+                <Form.Item name="name">
                   <Input addonBefore="이름" disabled />
                 </Form.Item>
               </Col>
@@ -88,18 +99,14 @@ function WritePage() {
             <Row gutter={8}>
               <Col span={12}>
                 <Input.Group>
-                  <Form.Item name="addr1">
-                    <Input
-                      addonBefore="주소"
-                      addonAfter={
-                        <span onClick={showDrawer}>
-                          검색&nbsp;&nbsp;
-                          <SearchOutlined />
-                        </span>
-                      }
-                      placeholder="검색 버튼으로 주소를 입력하세요"
-                      value={addr}
-                    />
+                  <Form.Item>
+                    <div>
+                      {addr1}
+                      <span onClick={showDrawer}>
+                        검색&nbsp;&nbsp;
+                        <SearchOutlined />
+                      </span>
+                    </div>
                   </Form.Item>
                 </Input.Group>
               </Col>
@@ -123,12 +130,8 @@ function WritePage() {
             />
           </Form.Item>
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
-              Log in
+            <Button type="primary" htmlType="submit">
+              글쓰기
             </Button>
           </Form.Item>
         </Form>

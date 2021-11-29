@@ -43,7 +43,7 @@ function Header() {
     else if (JSON.parse(sessionStorage.getItem("user"))) {
       var res = SyncRequest(
         "POST",
-        `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${
+        `/map/oauth2/v1/tokeninfo?access_token=${
           JSON.parse(sessionStorage.getItem("user"))["accessToken"]
         }`
       );
