@@ -3,6 +3,7 @@ import "antd/dist/antd.css";
 import IndexPage from "./index/index";
 import GVHelpPage from "./gvhelp/index";
 import Help_board from "./help_board/index";
+import WritePage from "./help_board/write_board/index";
 import Iot_apply from "./iot_apply/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
@@ -20,12 +21,15 @@ function App() {
         {/* 메뉴 (도움요청 게시판, 헬프맵, iot 신청, 마이페이지) */}
         <Navigation />
       </div>
-
       <div id="body">
         <Switch>
           {/* 메인페이지 */}
           <Route exact="true" path={"/"}>
             <IndexPage />
+          </Route>
+          {/* 도움 요청 게시판 글쓰기 */}
+          <Route exact="true" path={"/write"}>
+            <WritePage />
           </Route>
           {/* 도움 요청 게시판 */}
           <Route exact="true" path={"/ndhelp"}>
