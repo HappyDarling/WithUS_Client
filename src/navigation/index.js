@@ -21,14 +21,14 @@ function Navigation() {
               <a href="/gvhelp">도와 주기</a>
             </li>
             <li
-              className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
+              className={parse()["pathname"] === "/apply" ? "active" : ""}
             >
               <a href="/apply">IOT 신청</a>
             </li>
             <li
-              className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
+              className={parse()["pathname"] === "/mngmember" ? "active" : ""}
             >
-              <a href="#">회원 관리</a>
+              <a href="/mngmember">회원 관리</a>
             </li>
           </ul>
           {/* <!-- /NAV --> */}

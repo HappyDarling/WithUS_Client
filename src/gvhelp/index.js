@@ -19,7 +19,8 @@ function GVHelpPage() {
   return (
     <div className="container">
       <RenderAfterNavermapsLoaded
-        ncpClientId={process.env.REACT_APP_Naver_API_KEY} // 자신의 네이버 계정에서 발급받은 Client ID
+        //ncpClientId={process.env.REACT_APP_Naver_API_KEY} // 자신의 네이버 계정에서 발급받은 Client ID
+        ncpClientId = "qrrth0qept"
         error={<p>Maps Load Error</p>}
         loading={<p>Maps Loading...</p>}
       >

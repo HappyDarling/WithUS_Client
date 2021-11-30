@@ -4,6 +4,7 @@ import IndexPage from "./index/index";
 import GVHelpPage from "./gvhelp/index";
 import Help_board from "./help_board/index";
 import Iot_apply from "./iot_apply/index";
+import MngMemner from "./mngmember/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
 import { Link, Route, Switch } from "react-router-dom";
@@ -39,10 +40,13 @@ function App() {
           <Route exact="true" path={"/apply"}>
             <Iot_apply />
           </Route>
+          <Route exact="true" path={"/mngmember"}>
+            <MngMemner />
+          </Route>
         </Switch>
       </div>
       <div id="footer"></div>
-      <Affix offsetBottom={10} style={{ position: "absolute", right: 10 }}>
+      <Affix offsetBottom={10} style={{ position: "absolute", right: 50 }}>
         <Button type="primary" onClick={() => console.log("TALKBOT CLICK")}>
           TALKBOT
         </Button>

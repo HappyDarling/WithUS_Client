@@ -24,3 +24,6 @@ yarn-error.log*
 
 # API Key
 .env
+
+src/gvhelp/index.js
+package-lock.json
