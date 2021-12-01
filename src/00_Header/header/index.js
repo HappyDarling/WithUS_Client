@@ -1,10 +1,12 @@
 import "./index.css";
-import SyncRequest from "sync-request";
 import React, { useState, useEffect } from "react";
 import { Popover, Modal, Button } from "antd";
-import { KakaoLogin, KakaoLogout } from "../auth/kakaoLogin/index";
+import { googleIsLogin } from "../../module/googleIsLogin";
+import { kakaoIsLogin } from "../../module/kakaoIsLogin";
+import { KakaoLogin, KakaoLogout } from "../../module/kakaoLoginOut";
 import GoogleLogin, { GoogleLogout } from "react-google-login";
 import { UserOutlined, MehOutlined, LogoutOutlined } from "@ant-design/icons";
+
 require("dotenv");
 
 function Header() {
@@ -16,57 +18,15 @@ function Header() {
   useEffect(() => {
     // 카카오 로그인 유지 (자체 함수 Validation)
     if (Kakao.Auth.getAccessToken()) {
-      setIsLogin(true);
-      Kakao.API.request({
-        url: "/v2/user/me",
-        success: function (response) {
-          // 서버에 저장할 항목
-          console.log(response);
-          // 프로필 사진
-          sessionStorage.setItem(
-            "profileImg",
-            response["kakao_account"]["profile"]["profile_image_url"]
-          );
-          // 이메일
-          sessionStorage.setItem("email", response["kakao_account"]["email"]);
-          // 이름
-          sessionStorage.setItem("name", response["properties"]["nickname"]);
-          sessionStorage.setItem("auth", "kakao");
-        },
-        fail: function (error) {
-          console.error(error);
-          KakaoLogout();
-        },
+      kakaoIsLogin().then((res) => {
+        setIsLogin(res);
       });
     }
     // 구글 로그인 유지 (Sync 통신으로 Access Token Validation)
     else if (JSON.parse(sessionStorage.getItem("user"))) {
-      var res = SyncRequest(
-        "POST",
-        `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${
-          JSON.parse(sessionStorage.getItem("user"))["accessToken"]
-        }`
-      );
-
-      if (res.statusCode == 200) {
-        setIsLogin(true);
-        // 서버에 저장할 항목
-        console.log(res);
-        // // 프로필 사진
-        sessionStorage.setItem(
-          "profileImg",
-          JSON.parse(res["body"])["picture"]
-        );
-        // // 이메일
-        sessionStorage.setItem("email", JSON.parse(res["body"])["email"]);
-        // // 이름
-        sessionStorage.setItem("name", JSON.parse(res["body"])["name"]);
-        sessionStorage.setItem("auth", "google");
-      } else {
-        sessionStorage.clear();
-        localStorage.clear();
-        setIsLogin(false);
-      }
+      googleIsLogin().then((res) => {
+        setIsLogin(res);
+      });
     }
   });
 

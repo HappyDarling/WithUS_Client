@@ -1,13 +1,13 @@
 import "./App.css";
 import "antd/dist/antd.css";
-import IndexPage from "./index/index";
-import GVHelpPage from "./gvhelp/index";
-import Help_board from "./help_board/index";
-import WritePage from "./help_board/write_board/index";
-import Iot_apply from "./iot_apply/index";
-import Header from "./header/index";
-import Navigation from "./navigation/index";
-import { Link, Route, Switch } from "react-router-dom";
+import Header from "./00_Header/header/index";
+import Navigation from "./00_Header/navigation/index";
+import IndexPage from "./01_Body/index/index";
+import GVHelpPage from "./01_Body/give_board/index";
+import Help_board from "./01_Body/help_board/index";
+import WritePage from "./01_Body/help_board/write_board/index";
+import Iot_apply from "./01_Body/iot_apply/index";
+import { Route, Switch } from "react-router-dom";
 import { Affix, Button } from "antd";
 
 function App() {

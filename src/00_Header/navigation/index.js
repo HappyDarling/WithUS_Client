@@ -11,21 +11,19 @@ function Navigation() {
         <div className="container">
           {/* <!-- NAV --> */}
           <ul className="main-nav nav navbar-nav">
-            <li className={parse()["pathname"] === "" ? "active" : ""}>
+            <li>
               <Link to="/">메인</Link>
             </li>
-            <li className={parse()["pathname"] === "/ndhelp" ? "active" : ""}>
+            <li>
               <Link to="/ndhelp">도움 요청</Link>
             </li>
-            <li className={parse()["pathname"] === "/gvhelp" ? "active" : ""}>
+            <li>
               <Link to="/gvhelp">도와 주기</Link>
             </li>
-            <li className={parse()["pathname"] === "/apply" ? "active" : ""}>
+            <li>
               <Link to="/apply">IOT 신청</Link>
             </li>
-            <li
-              className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
-            >
+            <li>
               <Link to="#">회원 관리</Link>
             </li>
           </ul>

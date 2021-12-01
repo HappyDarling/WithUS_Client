@@ -1,4 +1,6 @@
 import "./index.css";
+import { useHistory } from "react-router-dom";
+import { userSave } from "../../../API/userSaveAPI";
 import SyncRequest from "sync-request";
 import React, { useState } from "react";
 import DaumPostCode from "react-daum-postcode";
@@ -8,6 +10,16 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 function WritePage() {
+  const history = useHistory();
+
+  if (sessionStorage.getItem("user")) {
+    userSave().then((res) => {
+      if (!res) {
+        history.push("/");
+      }
+    });
+  }
+
   // Drawer 변수 관리할 state
   const [state, setState] = useState(false);
 

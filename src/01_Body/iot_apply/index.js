@@ -1,7 +1,18 @@
 import "./index.css";
-import { Button } from 'antd';
+import { useHistory } from "react-router-dom";
+import { userSave } from "../../API/userSaveAPI";
+import { Button } from "antd";
 
 function IndexPage() {
+  const history = useHistory();
+
+  if (sessionStorage.getItem("user")) {
+    userSave().then((res) => {
+      if (!res) {
+        history.push("/");
+      }
+    });
+  }
 
   return (
     <div>
@@ -9,7 +20,7 @@ function IndexPage() {
       <div className="container">
         <div className="iot-wrapper">
           <div id="iot-apply-title">
-              <p>IOT 신청하기</p>
+            <p>IOT 신청하기</p>
           </div>
           <div id="iot-introduce">
             <div id="iot-img">
@@ -17,7 +28,8 @@ function IndexPage() {
             </div>
             <div id="iot-p">
               <p>
-                이 iot를 설치하세요!<br />
+                이 iot를 설치하세요!
+                <br />
                 당신에게 도움이 될 것입니다.
               </p>
             </div>

@@ -1,7 +1,18 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
+import { userSave } from "../../API/userSaveAPI";
 import { RenderAfterNavermapsLoaded, NaverMap } from "react-naver-maps";
 
 function NaverMapAPI() {
+  const history = useHistory();
+  if (sessionStorage.getItem("user")) {
+    userSave().then((res) => {
+      if (!res) {
+        history.push("/");
+      }
+    });
+  }
+
   return (
     <NaverMap
       mapDivId={"maps-getting-started-uncontrolled"} // default: react-naver-map
