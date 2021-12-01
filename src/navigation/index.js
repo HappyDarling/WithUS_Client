@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 var parse = require("url-parse");
 
 function Navigation() {
-  console.log();
   return (
     <div>
       {/* <!-- NAVIGATION --> */}
@@ -12,7 +11,7 @@ function Navigation() {
         <div className="container">
           {/* <!-- NAV --> */}
           <ul className="main-nav nav navbar-nav">
-            <li className={parse()["pathname"] === "/" ? "active" : ""}>
+            <li className={parse()["pathname"] === "" ? "active" : ""}>
               <Link to="/">메인</Link>
             </li>
             <li className={parse()["pathname"] === "/ndhelp" ? "active" : ""}>
@@ -21,9 +20,7 @@ function Navigation() {
             <li className={parse()["pathname"] === "/gvhelp" ? "active" : ""}>
               <Link to="/gvhelp">도와 주기</Link>
             </li>
-            <li
-              className={parse()["pathname"] === "/dddddddddd" ? "active" : ""}
-            >
+            <li className={parse()["pathname"] === "/apply" ? "active" : ""}>
               <Link to="/apply">IOT 신청</Link>
             </li>
             <li

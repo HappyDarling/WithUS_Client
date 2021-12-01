@@ -43,15 +43,28 @@ function Header() {
     else if (JSON.parse(sessionStorage.getItem("user"))) {
       var res = SyncRequest(
         "POST",
-        `/map/oauth2/v1/tokeninfo?access_token=${
+        `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${
           JSON.parse(sessionStorage.getItem("user"))["accessToken"]
         }`
       );
 
       if (res.statusCode == 200) {
         setIsLogin(true);
+        // 서버에 저장할 항목
+        console.log(res);
+        // // 프로필 사진
+        sessionStorage.setItem(
+          "profileImg",
+          JSON.parse(res["body"])["picture"]
+        );
+        // // 이메일
+        sessionStorage.setItem("email", JSON.parse(res["body"])["email"]);
+        // // 이름
+        sessionStorage.setItem("name", JSON.parse(res["body"])["name"]);
         sessionStorage.setItem("auth", "google");
       } else {
+        sessionStorage.clear();
+        localStorage.clear();
         setIsLogin(false);
       }
     }
@@ -93,6 +106,7 @@ function Header() {
 
   const onLogoutGoogle = (auth) => {
     sessionStorage.clear();
+    localStorage.clear();
     window.history.go(0);
   };
 
