@@ -1,19 +1,7 @@
 import "./index.css";
-import { useHistory } from "react-router-dom";
-import { userSave } from "../../API/userSaveAPI";
 import { Button } from "antd";
 
 function IndexPage() {
-  const history = useHistory();
-
-  if (sessionStorage.getItem("user")) {
-    userSave().then((res) => {
-      if (!res) {
-        history.push("/");
-      }
-    });
-  }
-
   return (
     <div>
       {/* <!-- container --> */}

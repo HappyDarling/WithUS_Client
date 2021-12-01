@@ -1,6 +1,4 @@
 import "./index.css";
-import { useHistory } from "react-router-dom";
-import { userSave } from "../../API/userSaveAPI";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { Row, Col, Card, Avatar } from "antd";
@@ -14,16 +12,6 @@ import {
 } from "@ant-design/icons";
 
 function IndexPage() {
-  const history = useHistory();
-
-  if (sessionStorage.getItem("user")) {
-    userSave().then((res) => {
-      if (!res) {
-        history.push("/");
-      }
-    });
-  }
-
   const contentStyle = {
     height: "240px",
     color: "#fff",

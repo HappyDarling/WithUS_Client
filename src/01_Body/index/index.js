@@ -1,13 +1,50 @@
 import "./index.css";
+import React from "react";
+import axios from "axios";
 import { Carousel } from "antd";
-import { Row, Col, Card, Avatar } from "antd";
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { Card, Avatar } from "antd";
+import { CheckOutlined, ReadOutlined } from "@ant-design/icons";
+require("dotenv");
+const { Meta } = Card;
 
 function IndexPage() {
+  // 지워야함 (CG)
+  const testPostList = {
+    testPostList: [
+      {
+        board_title: "도움 요청 1!",
+        board_writer: "도움 필요해요!!",
+        board_category: "노인",
+      },
+      {
+        board_title: "도움 요청 2!",
+        board_writer: "도움 필요해요!!",
+        board_category: "아동",
+      },
+      {
+        board_title: "도움 요청 3!",
+        board_writer: "도움 필요해요!!",
+        board_category: "고독",
+      },
+      {
+        board_title: "도움 요청 4!",
+        board_writer: "도움 필요해요!!",
+        board_category: "노인",
+      },
+      {
+        board_title: "도움 요청 5!",
+        board_writer: "도움 필요해요!!",
+        board_category: "노인",
+      },
+      {
+        board_title: "도움 요청 6!",
+        board_writer: "도움 필요해요!!",
+        board_category: "장애인",
+      },
+    ],
+  };
+  // 지워야함 (CG)
+
   const contentStyle = {
     height: "240px",
     color: "#fff",
@@ -16,7 +53,21 @@ function IndexPage() {
     background: "#364d79",
   };
 
-  const { Meta } = Card;
+  // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
+  const [postList, setPostList] = React.useState([]);
+
+  React.useEffect(function () {
+    axios
+      .get(process.env.API_URL_RecentPostList)
+      .then(function (result) {
+        // 결과의 포스트 리스트를 추출할 수 있는 변수
+        const posts = result;
+        setPostList(posts);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <div>
@@ -41,8 +92,9 @@ function IndexPage() {
         <div id="help-card">
           <div id="help-card-title">도움이 필요해요!</div>
           <div className="site-card-wrapper">
-            <Row gutter={16}>
-              <Col span={8}>
+            {/* API URL에서 받은 데이터 부분으로 바꿔야 함 (CG) */}
+            {testPostList.testPostList.map(function (post) {
+              return (
                 <Card
                   cover={
                     <img
@@ -51,128 +103,23 @@ function IndexPage() {
                     />
                   }
                   actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
+                    <ReadOutlined key="read" />,
+                    <CheckOutlined key="check" />,
                   ]}
+                  style={{
+                    width: "30%",
+                    display: "inline-block",
+                    margin: "10px",
+                  }}
                 >
                   <Meta
                     avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                    title="Card title"
-                    description="This is the description"
+                    title={post.board_title}
+                    description={post.board_writer}
                   />
                 </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                  }
-                  actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                  ]}
-                >
-                  <Meta
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                    title="Card title"
-                    description="This is the description"
-                  />
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                  }
-                  actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                  ]}
-                >
-                  <Meta
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                    title="Card title"
-                    description="This is the description"
-                  />
-                </Card>
-              </Col>
-            </Row>
-            <div className="margin"></div>
-            <Row gutter={16}>
-              <Col span={8}>
-                <Card
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                  }
-                  actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                  ]}
-                >
-                  <Meta
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                    title="Card title"
-                    description="This is the description"
-                  />
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                  }
-                  actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                  ]}
-                >
-                  <Meta
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                    title="Card title"
-                    description="This is the description"
-                  />
-                </Card>
-              </Col>
-              <Col span={8}>
-                <Card
-                  cover={
-                    <img
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                  }
-                  actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
-                  ]}
-                >
-                  <Meta
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-                    title="Card title"
-                    description="This is the description"
-                  />
-                </Card>
-              </Col>
-            </Row>
-            <div className="margin"></div>
+              );
+            })}
           </div>
         </div>
         <div id="banner">

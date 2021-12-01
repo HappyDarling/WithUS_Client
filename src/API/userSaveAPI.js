@@ -9,7 +9,7 @@ const userSave = () => {
 
     if (res.status == 200) {
       resolve(true);
-    } else if (res.status == 401) {
+    } else if (res.status == 400) {
       resolve(false);
     } else {
       resolve(false);

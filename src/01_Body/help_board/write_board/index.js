@@ -1,6 +1,4 @@
 import "./index.css";
-import { useHistory } from "react-router-dom";
-import { userSave } from "../../../API/userSaveAPI";
 import SyncRequest from "sync-request";
 import React, { useState } from "react";
 import DaumPostCode from "react-daum-postcode";
@@ -10,16 +8,6 @@ const { Option } = Select;
 const { TextArea } = Input;
 
 function WritePage() {
-  const history = useHistory();
-
-  if (sessionStorage.getItem("user")) {
-    userSave().then((res) => {
-      if (!res) {
-        history.push("/");
-      }
-    });
-  }
-
   // Drawer 변수 관리할 state
   const [state, setState] = useState(false);
 
@@ -35,12 +23,12 @@ function WritePage() {
   };
 
   // 게시글 등록 Submit 함수
-  const onPostFinish = async (values) => {
+  const onPostFinish = (values) => {
     values.addr1 = addr1;
 
     var res = SyncRequest(
       "POST",
-      `https://cors-anywhere.herokuapp.com/http://api.vworld.kr/req/address?service=address&request=getcoord&address=${encodeURI(
+      `https://withusyoume.herokuapp.com/http://api.vworld.kr/req/address?service=address&request=getcoord&address=${encodeURI(
         addr1
       )}&type=road&key=${process.env.REACT_APP_VWorld_API_KEY}`
     );
