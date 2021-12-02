@@ -287,9 +287,15 @@ function IndexPage() {
         </div>
         {/* 페이지 넘기기 */}
         <div id="pagnation">
-            <Pagination simple defaultCurrent={1} total={50} />
-            <br />
-            {/* <Pagination disabled simple defaultCurrent={1} total={50} /> */}            
+            <Pagination
+              simple
+              defaultCurrent={1}
+              total={100}
+              onChange={(page) => {
+                console.log(page);
+              }}
+            />
+            <br />           
         </div>
       </div>
     </div>

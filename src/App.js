@@ -4,7 +4,8 @@ import IndexPage from "./index/index";
 import GVHelpPage from "./gvhelp/index";
 import Help_board from "./help_board/index";
 import Iot_apply from "./iot_apply/index";
-import MngMemner from "./mngmember/index";
+import MngMember from "./mngmember/index";
+import MyPage from "./mypage/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
 import { Link, Route, Switch } from "react-router-dom";
@@ -40,8 +41,13 @@ function App() {
           <Route exact="true" path={"/apply"}>
             <Iot_apply />
           </Route>
+          {/* 회원 관리 */}
           <Route exact="true" path={"/mngmember"}>
-            <MngMemner />
+            <MngMember />
+          </Route>
+          {/* 마이페이지 */}
+          <Route exact="true" path={"/mypage"}>
+            <MyPage />
           </Route>
         </Switch>
       </div>
