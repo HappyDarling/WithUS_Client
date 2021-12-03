@@ -33,10 +33,10 @@ const KakaoLogin = () => {
 
   return (
     <div>
-      <a id="custom-login-btn" onClick={loginWithKakao}>
+      <a href="#!" id="custom-login-btn" onClick={loginWithKakao}>
         <img
+          alt={"kakao"}
           src="./images/snsLogin/kakao.png"
-          width="222"
           width="300px"
           height="70px"
           style={login_view_logoStyle}

@@ -1,7 +1,7 @@
 import "./index.css";
 import { Button } from "antd";
 
-function IndexPage() {
+function IotApplyPage() {
   return (
     <div>
       {/* <!-- container --> */}
@@ -38,4 +38,4 @@ function IndexPage() {
   );
 }
 
-export default IndexPage;
+export default IotApplyPage;

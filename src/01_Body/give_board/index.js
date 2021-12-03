@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Drawer, Descriptions, Badge, Button } from "antd";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
+import { googleIsLogin } from "../../module/googleIsLogin";
+import { kakaoIsLogin } from "../../module/kakaoIsLogin";
+import { requireFieldCheck } from "../../API/requireFieldCheckAPI";
 
 // 전역으로 State 관리
 var visible, setVisible;
@@ -10,7 +13,6 @@ var startDate, setStartDate;
 var endDate, setEndDate;
 var category, setCategory;
 var id, setId;
-var writer, setWriter;
 
 function NaverMapAPI() {
   // 지워야함 (CG)
@@ -64,9 +66,10 @@ function NaverMapAPI() {
       defaultZoom={13} // 지도 초기 확대 배율
     >
       {/* API URL에서 받은 데이터 부분으로 바꿔야 함 (CG) */}
-      {testMapData.testData.map(function (mapData) {
+      {testMapData.testData.map(function (mapData, index) {
         return (
           <Marker
+            key={index}
             position={navermaps.LatLng(
               mapData.location.board_lat,
               mapData.location.board_lng
@@ -88,6 +91,8 @@ function NaverMapAPI() {
 }
 
 function GVHelpPage() {
+  const { Kakao } = window;
+
   // 전역으로 State 관리
   [visible, setVisible] = useState(false);
   [addr, setAddr] = useState("");
@@ -96,23 +101,55 @@ function GVHelpPage() {
   [startDate, setStartDate] = useState("");
   [endDate, setEndDate] = useState("");
 
-  const [placement, setPlacement] = useState("right");
+  // Drawer창의 Btn Click Event
+  const onReadPostBtn = () => {};
 
-  const showDrawer = () => {
-    setVisible(true);
-  };
+  const onApplyBtn = () => {
+    if (Kakao.Auth.getAccessToken()) {
+      kakaoIsLogin()
+        .then()
+        .catch((err) => {
+          alert("인증 정보가 유효하지 않습니다!");
+          window.history.go(0);
+          return;
+        });
+    } else if (JSON.parse(sessionStorage.getItem("user"))) {
+      googleIsLogin()
+        .then()
+        .catch((err) => {
+          alert("인증 정보가 유효하지 않습니다!");
+          window.history.go(0);
+          return;
+        });
+    } else {
+      alert("로그인이 되어있지 않습니다!");
+      window.history.go(0);
+      return;
+    }
 
-  const onChange = (e) => {
-    setPlacement(e.target.value);
+    // 사이트를 이용하기 위한 필수 Field들이 서버에 있는지 체크
+    requireFieldCheck(sessionStorage.getItem("email"))
+      .then((res) => {
+        alert("성공");
+        console.log("res");
+      })
+      .catch((err) => {
+        alert(
+          "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
+        );
+        window.location.href = "/require";
+        return;
+      });
   };
 
   const onClose = () => {
     setVisible(false);
   };
+
   return (
     <div className="container">
       <Drawer
-        placement={placement}
+        placement={"right"}
         width={500}
         onClose={onClose}
         visible={visible}
@@ -139,7 +176,7 @@ function GVHelpPage() {
           }}
         >
           <Button size="large">게시글로</Button>
-          <Button type="primary" size="large">
+          <Button type="primary" size="large" onClick={onApplyBtn}>
             지원하기
           </Button>
         </div>

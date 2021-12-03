@@ -1,39 +1,39 @@
 import "./index.css";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { Row, Col, Card, Avatar } from "antd";
 import { Input, Space } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
 import { Pagination } from "antd";
 import {
+  ReadOutlined,
+  CheckOutlined,
   EditOutlined,
   EllipsisOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+var parse = require("url-parse");
+const { Meta } = Card;
+const { Search } = Input;
 
-function IndexPage() {
-  const contentStyle = {
-    height: "240px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-  };
+function HelpBoardPage() {
+  // 카테고리 변경 감지 State
+  const [category, setCategory] = useState("");
 
-  function IndexPage() {
-    const suffix = (
-      <AudioOutlined
-        style={{
-          fontSize: 16,
-          color: "#1890ff",
-        }}
-      />
-    );
-  }
-
-  const { Meta } = Card;
-
-  const { Search } = Input;
+  // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
+  // const [postList, setPostList] = React.useState([]);
+  // React.useEffect(function () {
+  //   axios
+  //     .get(process.env.API_URL_RecentPostList)
+  //     .then(function (result) {
+  //       // 결과의 포스트 리스트를 추출할 수 있는 변수
+  //       const posts = result;
+  //       setPostList(posts);
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  // }, []);
 
   const onSearch = (value) => console.log(value);
 
@@ -47,24 +47,44 @@ function IndexPage() {
         {/* 도움 요청 게시판의 카테고리 */}
         <div id="categories">
           <div id="categories-icon">
-            <a href="#" className="icon">
+            <a
+              className="icon"
+              onClick={() => {
+                setCategory("elderly");
+              }}
+            >
               <img src="./images/icon/icon_elderly.png" alt="노인" />
             </a>
-            <a href="#" className="icon">
+            <a
+              className="icon"
+              onClick={() => {
+                setCategory("disabled");
+              }}
+            >
               <img
                 src="./images/icon/icon_disabled.png"
                 alt="장애인"
                 width="100px"
               />
             </a>
-            <a href="#" className="icon">
+            <a
+              className="icon"
+              onClick={() => {
+                setCategory("children");
+              }}
+            >
               <img
                 src="./images/icon/icon_children.png"
                 alt="어린이"
                 width="100px"
               />
             </a>
-            <a href="#" className="icon">
+            <a
+              className="icon"
+              onClick={() => {
+                setCategory("lonley");
+              }}
+            >
               <img
                 src="./images/icon/icon_lonley.png"
                 alt="고독"
@@ -91,9 +111,8 @@ function IndexPage() {
                     />
                   }
                   actions={[
-                    <SettingOutlined key="setting" />,
-                    <EditOutlined key="edit" />,
-                    <EllipsisOutlined key="ellipsis" />,
+                    <ReadOutlined key="read" />,
+                    <CheckOutlined key="check" />,
                   ]}
                 >
                   <Meta
@@ -303,4 +322,4 @@ function IndexPage() {
   );
 }
 
-export default IndexPage;
+export default HelpBoardPage;

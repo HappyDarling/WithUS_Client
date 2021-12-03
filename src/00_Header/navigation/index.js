@@ -1,8 +1,9 @@
 import "./index.css";
 import { Link } from "react-router-dom";
-var parse = require("url-parse");
 
 function Navigation() {
+  var auth;
+
   return (
     <div>
       {/* <!-- NAVIGATION --> */}
@@ -24,7 +25,7 @@ function Navigation() {
               <Link to="/apply">IOT 신청</Link>
             </li>
             <li>
-              <Link to="#">회원 관리</Link>
+              {auth !== "manager" ? <div></div> : <Link to="#">회원 관리</Link>}
             </li>
           </ul>
           {/* <!-- /NAV --> */}

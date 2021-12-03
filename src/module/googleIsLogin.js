@@ -9,7 +9,7 @@ const googleIsLogin = () => {
       }`
     );
 
-    if (res.statusCode == 200) {
+    if (res.statusCode === 200) {
       // 서버에 저장할 항목
       console.log(res);
       // 프로필 사진

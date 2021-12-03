@@ -1,5 +1,6 @@
 import "./index.css";
 import React from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { Carousel } from "antd";
 import { Card, Avatar } from "antd";
@@ -54,20 +55,19 @@ function IndexPage() {
   };
 
   // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
-  const [postList, setPostList] = React.useState([]);
-
-  React.useEffect(function () {
-    axios
-      .get(process.env.API_URL_RecentPostList)
-      .then(function (result) {
-        // 결과의 포스트 리스트를 추출할 수 있는 변수
-        const posts = result;
-        setPostList(posts);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  }, []);
+  // const [postList, setPostList] = React.useState([]);
+  // React.useEffect(function () {
+  //   axios
+  //     .get(process.env.API_URL_RecentPostList)
+  //     .then(function (result) {
+  //       // 결과의 포스트 리스트를 추출할 수 있는 변수
+  //       const posts = result;
+  //       setPostList(posts);
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  // }, []);
 
   return (
     <div>
@@ -93,9 +93,10 @@ function IndexPage() {
           <div id="help-card-title">도움이 필요해요!</div>
           <div className="site-card-wrapper">
             {/* API URL에서 받은 데이터 부분으로 바꿔야 함 (CG) */}
-            {testPostList.testPostList.map(function (post) {
+            {testPostList.testPostList.map(function (post, index) {
               return (
                 <Card
+                  key={index}
                   cover={
                     <img
                       alt="example"
@@ -103,7 +104,9 @@ function IndexPage() {
                     />
                   }
                   actions={[
-                    <ReadOutlined key="read" />,
+                    <Link to={`/read/${index}`}>
+                      <ReadOutlined key="read" />
+                    </Link>,
                     <CheckOutlined key="check" />,
                   ]}
                   style={{

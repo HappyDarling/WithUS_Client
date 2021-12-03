@@ -4,9 +4,10 @@ import Header from "./00_Header/header/index";
 import Navigation from "./00_Header/navigation/index";
 import IndexPage from "./01_Body/index/index";
 import GVHelpPage from "./01_Body/give_board/index";
-import Help_board from "./01_Body/help_board/index";
+import HelpBoardPage from "./01_Body/help_board/index";
 import WritePage from "./01_Body/help_board/write_board/index";
-import Iot_apply from "./01_Body/iot_apply/index";
+import IotApplyPage from "./01_Body/iot_apply/index";
+import RequireBoardPage from "./01_Body/require_board/index";
 import { Route, Switch } from "react-router-dom";
 import { Affix, Button } from "antd";
 
@@ -23,9 +24,13 @@ function App() {
       </div>
       <div id="body">
         <Switch>
-          {/* 메인페이지 */}
+          {/* 메인 페이지 */}
           <Route exact="true" path={"/"}>
             <IndexPage />
+          </Route>
+          {/* 필수 정보 요구 페이지 */}
+          <Route exact="true" path={"/require"}>
+            <RequireBoardPage />
           </Route>
           {/* 도움 요청 게시판 글쓰기 */}
           <Route exact="true" path={"/write"}>
@@ -33,7 +38,7 @@ function App() {
           </Route>
           {/* 도움 요청 게시판 */}
           <Route exact="true" path={"/ndhelp"}>
-            <Help_board />
+            <HelpBoardPage />
           </Route>
           {/* 도움 주기 게시판 */}
           <Route exact="true" path={"/gvhelp"}>
@@ -41,7 +46,7 @@ function App() {
           </Route>
           {/* iot 신청 */}
           <Route exact="true" path={"/apply"}>
-            <Iot_apply />
+            <IotApplyPage />
           </Route>
         </Switch>
       </div>

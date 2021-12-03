@@ -75,7 +75,7 @@ function Header() {
       <GoogleLogout
         clientId={REACT_APP_GOOGLE_API_KEY}
         render={(renderProps) => (
-          <a onClick={renderProps.onClick}>
+          <a href="{() => false}" onClick={renderProps.onClick}>
             <Button icon={<LogoutOutlined />} size="large" style={btn}>
               로그아웃
             </Button>
@@ -87,7 +87,7 @@ function Header() {
   );
   const kakaoLogout = (
     <div>
-      <a id="custom-login-btn" onClick={KakaoLogout}>
+      <a href="{() => false}" id="custom-login-btn" onClick={KakaoLogout}>
         <Button icon={<LogoutOutlined />} size="large" style={btn}>
           로그아웃
         </Button>
@@ -101,7 +101,11 @@ function Header() {
     <div className="profileContainer">
       <div className="OuterBox">
         <div className="box">
-          <img src={sessionStorage.getItem("profileImg")} className="profile" />
+          <img
+            src={sessionStorage.getItem("profileImg")}
+            className="profile"
+            alt={"profile"}
+          />
         </div>
         <div>
           <div className="email_name">{sessionStorage.getItem("name")}</div>
@@ -144,6 +148,7 @@ function Header() {
           <Modal
             title={
               <img
+                alt={"logo"}
                 src="./logo_Login.png"
                 width="192px"
                 style={login_view_logoStyle}
@@ -158,8 +163,9 @@ function Header() {
               <GoogleLogin
                 clientId={REACT_APP_GOOGLE_API_KEY}
                 render={(renderProps) => (
-                  <a onClick={renderProps.onClick}>
+                  <a href="{() => false}" onClick={renderProps.onClick}>
                     <img
+                      alt={"google"}
                       width="300px"
                       height="70px"
                       src="./images/snsLogin/google.png"
@@ -176,6 +182,7 @@ function Header() {
             </p>
             <p>
               <img
+                alt={"naver"}
                 src="./images/snsLogin/naver.png"
                 width="300px"
                 height="70px"
@@ -227,7 +234,7 @@ function Header() {
               <div className="col-md-3">
                 <div className="header-logo">
                   <a href="/" className="logo">
-                    <img src="./logo.png" width="192px" />
+                    <img alt={"logo"} src="./logo.png" width="192px" />
                   </a>
                 </div>
               </div>

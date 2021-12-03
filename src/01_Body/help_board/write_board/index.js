@@ -1,13 +1,58 @@
+// 반드시 Heroku Server WakeUp 한 뒤 진행
+
 import "./index.css";
 import SyncRequest from "sync-request";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DaumPostCode from "react-daum-postcode";
 import { Drawer, Row, Col, Form, Input, Button, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { requireFieldCheck } from "../../../API/requireFieldCheckAPI";
+import { googleIsLogin } from "../../../module/googleIsLogin";
+import { kakaoIsLogin } from "../../../module/kakaoIsLogin";
 const { Option } = Select;
 const { TextArea } = Input;
 
 function WritePage() {
+  const { Kakao } = window;
+
+  // 로그인이 되어있는지 여부에 대한 체크
+  useEffect(() => {
+    if (Kakao.Auth.getAccessToken()) {
+      kakaoIsLogin()
+        .then()
+        .catch((err) => {
+          alert("인증 정보가 유효하지 않습니다!");
+          window.history.go(-1);
+          return;
+        });
+    } else if (JSON.parse(sessionStorage.getItem("user"))) {
+      googleIsLogin()
+        .then()
+        .catch((err) => {
+          alert("인증 정보가 유효하지 않습니다!");
+          window.history.go(-1);
+          return;
+        });
+    } else {
+      alert("로그인이 되어있지 않습니다!");
+      window.history.go(-1);
+      return;
+    }
+
+    // 사이트를 이용하기 위한 필수 Field들이 서버에 있는지 체크
+    requireFieldCheck(sessionStorage.getItem("email"))
+      .then((res) => {
+        console.log("res");
+      })
+      .catch((err) => {
+        alert(
+          "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
+        );
+        console.log(err);
+        return;
+      });
+  });
+
   // Drawer 변수 관리할 state
   const [state, setState] = useState(false);
 
@@ -33,7 +78,7 @@ function WritePage() {
       )}&type=road&key=${process.env.REACT_APP_VWorld_API_KEY}`
     );
 
-    if (res.status == "OK") {
+    if (res.status === "OK") {
       console.log(res.result.point.x);
       console.log(res.result.point.y);
     } else {
