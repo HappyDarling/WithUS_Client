@@ -30,6 +30,11 @@ function Navigation() {
             >
               <a href="/mngmember">회원 관리</a>
             </li>
+            <li
+              className={parse()["pathname"] === "/mypage" ? "active" : ""}
+            >
+              <a href="/mypage">마이페이지</a>
+            </li>
           </ul>
           {/* <!-- /NAV --> */}
         </div>

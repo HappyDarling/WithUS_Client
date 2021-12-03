@@ -19,16 +19,14 @@ function IndexPage() {
     background: "#364d79",
   };
 
-  function IndexPage() {
-    const suffix = (
-      <AudioOutlined
-        style={{
-          fontSize: 16,
-          color: '#1890ff',
-        }}
-      />
-    );
-  }
+  const suffix = (
+    <AudioOutlined
+      style={{
+        fontSize: 16,
+        color: '#1890ff',
+      }}
+    />
+  );
 
   const { Meta } = Card;
 
@@ -48,6 +46,9 @@ function IndexPage() {
         {/* 도움 요청 게시판의 카테고리 */}
         <div id="categories">
             <div id="categories-icon">
+                <a href="#" className="icon">
+                    <img src="./images/icon/icon_all.png" alt="전체" />
+                </a>
                 <a href="#" className="icon">
                     <img src="./images/icon/icon_elderly.png" alt="노인" />
                 </a>
@@ -287,9 +288,15 @@ function IndexPage() {
         </div>
         {/* 페이지 넘기기 */}
         <div id="pagnation">
-            <Pagination simple defaultCurrent={1} total={50} />
-            <br />
-            {/* <Pagination disabled simple defaultCurrent={1} total={50} /> */}            
+            <Pagination
+              simple
+              defaultCurrent={1}
+              total={100}
+              onChange={(page) => {
+                console.log(page);
+              }}
+            />
+            <br />           
         </div>
       </div>
     </div>
