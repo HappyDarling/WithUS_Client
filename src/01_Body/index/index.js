@@ -9,43 +9,6 @@ require("dotenv");
 const { Meta } = Card;
 
 function IndexPage() {
-  // 지워야함 (CG)
-  const testPostList = {
-    testPostList: [
-      {
-        board_title: "도움 요청 1!",
-        board_writer: "도움 필요해요!!",
-        board_category: "노인",
-      },
-      {
-        board_title: "도움 요청 2!",
-        board_writer: "도움 필요해요!!",
-        board_category: "아동",
-      },
-      {
-        board_title: "도움 요청 3!",
-        board_writer: "도움 필요해요!!",
-        board_category: "고독",
-      },
-      {
-        board_title: "도움 요청 4!",
-        board_writer: "도움 필요해요!!",
-        board_category: "노인",
-      },
-      {
-        board_title: "도움 요청 5!",
-        board_writer: "도움 필요해요!!",
-        board_category: "노인",
-      },
-      {
-        board_title: "도움 요청 6!",
-        board_writer: "도움 필요해요!!",
-        board_category: "장애인",
-      },
-    ],
-  };
-  // 지워야함 (CG)
-
   const contentStyle = {
     height: "240px",
     color: "#fff",
@@ -55,19 +18,19 @@ function IndexPage() {
   };
 
   // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
-  // const [postList, setPostList] = React.useState([]);
-  // React.useEffect(function () {
-  //   axios
-  //     .get(process.env.API_URL_RecentPostList)
-  //     .then(function (result) {
-  //       // 결과의 포스트 리스트를 추출할 수 있는 변수
-  //       const posts = result;
-  //       setPostList(posts);
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-  // }, []);
+  const [postList, setPostList] = React.useState({ data: [] });
+  React.useEffect(function () {
+    axios
+      .get(`${process.env.REACT_APP_Backend_Server}`)
+      .then(function (result) {
+        // 결과의 포스트 리스트를 추출할 수 있는 변수
+        console.log(result);
+        setPostList(result);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, []);
 
   return (
     <div>
@@ -93,7 +56,7 @@ function IndexPage() {
           <div id="help-card-title">도움이 필요해요!</div>
           <div className="site-card-wrapper">
             {/* API URL에서 받은 데이터 부분으로 바꿔야 함 (CG) */}
-            {testPostList.testPostList.map(function (post, index) {
+            {postList.data.map(function (post, index) {
               return (
                 <Card
                   key={index}

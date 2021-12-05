@@ -78,14 +78,36 @@ function WritePage() {
       )}&type=road&key=${process.env.REACT_APP_VWorld_API_KEY}`
     );
 
-    if (res.status === "OK") {
-      console.log(res.result.point.x);
-      console.log(res.result.point.y);
+    if (JSON.parse(res.body).response.status === "OK") {
+      var sendPost = SyncRequest(
+        "POST",
+        `${process.env.REACT_APP_Backend_Server}/ndhelp/write`,
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+          body: {
+            board_writer: sessionStorage.getItem("name"),
+            board_title: values.title,
+            board_content: values.content,
+            board_category: values.category,
+            board_start_date: "2012-12-30 14:11:23",
+            board_end_date: "2012-12-30 14:11:23",
+            board_lat: JSON.parse(res.body).response.result.point.x,
+            board_lng: JSON.parse(res.body).response.result.point.y,
+            board_addr: "경도1",
+            board_region1Depth: JSON.parse(res.body).response.refined.structure
+              .level1,
+            board_region2Depth: JSON.parse(res.body).response.refined.structure
+              .level2,
+          },
+        }
+      );
+
+      console.log(sendPost);
     } else {
       console.log(res.body);
     }
-
-    console.log("Received values of form: ", values);
   };
 
   // Drawer - Find PostCode
@@ -125,7 +147,11 @@ function WritePage() {
             <Row gutter={8}>
               <Col span={12}>
                 <Form.Item name="name">
-                  <Input addonBefore="이름" disabled />
+                  <Input
+                    addonBefore="이름"
+                    defaultValue={sessionStorage.getItem("name")}
+                    disabled
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>

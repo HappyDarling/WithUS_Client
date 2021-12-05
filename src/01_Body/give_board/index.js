@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Drawer, Descriptions, Badge, Button } from "antd";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
@@ -53,6 +54,23 @@ function NaverMapAPI() {
   };
   // 지워야함 (CG)
 
+  // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
+  const [mapList, setMapList] = React.useState({ data: [] });
+  React.useEffect(function () {
+    axios
+      .get(
+        `https://withusyoume.herokuapp.com/${process.env.REACT_APP_Backend_Server}/gvhelp?board_lat=&board_lng=&board_addr=&board_region1Depth=&board_region2Depth=`
+      )
+      .then(function (result) {
+        // 결과의 포스트 리스트를 추출할 수 있는 변수
+        console.log(result);
+        setMapList(result);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }, []);
+
   const navermaps = window.naver.maps;
 
   return (
@@ -66,7 +84,7 @@ function NaverMapAPI() {
       defaultZoom={13} // 지도 초기 확대 배율
     >
       {/* API URL에서 받은 데이터 부분으로 바꿔야 함 (CG) */}
-      {testMapData.testData.map(function (mapData, index) {
+      {mapList.data.map(function (mapData, index) {
         return (
           <Marker
             key={index}
