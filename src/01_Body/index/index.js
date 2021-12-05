@@ -67,7 +67,7 @@ function IndexPage() {
                     />
                   }
                   actions={[
-                    <Link to={`/read/${index}`}>
+                    <Link to={`/read?id=${index}`}>
                       <ReadOutlined key="read" />
                     </Link>,
                     <CheckOutlined key="check" />,

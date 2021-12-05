@@ -1,5 +1,6 @@
 import "./index.css";
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Popover, Modal, Button } from "antd";
 import { googleIsLogin } from "../../module/googleIsLogin";
 import { kakaoIsLogin } from "../../module/kakaoIsLogin";
@@ -114,7 +115,9 @@ function Header() {
       </div>
       <div id="myPage">
         <Button icon={<MehOutlined />} size="large" style={btn}>
-          마이페이지
+          <Link to="/mypage">
+            <span> 마이페이지</span>
+          </Link>
         </Button>
       </div>
       <div id="logout">

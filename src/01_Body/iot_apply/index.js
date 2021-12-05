@@ -22,7 +22,6 @@ function IotApplyPage() {
               </p>
             </div>
           </div>
-          <div className="margin"></div>
           <div id="iot-apply-button">
             <Button
               type="primary"
