@@ -30,10 +30,16 @@ function Navigation() {
             >
               <a href="/mngmember">회원 관리</a>
             </li>
+            {/*(스타일 보려고 잠깐 여기에 둠) */}
             <li
               className={parse()["pathname"] === "/mypage" ? "active" : ""}
             >
               <a href="/mypage">마이페이지</a>
+            </li>
+            <li
+              className={parse()["pathname"] === "/detail" ? "active" : ""}
+            >
+              <a href="/detail">누군가 쓴 게시글</a>
             </li>
           </ul>
           {/* <!-- /NAV --> */}

@@ -7,10 +7,13 @@
   width: 100%;
   padding-left: 30px;
   padding-right: 30px;
+  margin-top: 100px;
+  margin-bottom: 100px;
 }
 
 #iot-apply-title {
-  margin: 20px 20px;
+  margin-left: 20px;
+  margin-right: 20px;
   text-align: center;
   font-family: "Jua", sans-serif;
   font-size: 28px;
@@ -18,6 +21,7 @@
 
 #iot-introduce {
   width: 100%;
+  margin-bottom: 50px;
 }
 
 #iot-img {

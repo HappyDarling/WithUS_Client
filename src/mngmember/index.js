@@ -90,7 +90,7 @@ function IndexPage() {
     };
     
     render() {
-      const { loading, selectedRowKeys } = this.state;
+      const { selectedRowKeys } = this.state;
       const rowSelection = {
         selectedRowKeys,
         onChange: this.onSelectChange,
@@ -214,7 +214,7 @@ function IndexPage() {
           <div id="mng-member-title">
               <p>회원 명단</p>
           </div>
-          <div>
+          <div id="mng-member-table">
             {/*체크박스 테이블 */}
             <App
               onChange={onSort}         

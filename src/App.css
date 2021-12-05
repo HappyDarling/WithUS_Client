@@ -2,3 +2,7 @@
   position: -webkit-sticky;
   position: sticky;
 }
+
+#body {
+  background-color: #e1e2e4;
+}
