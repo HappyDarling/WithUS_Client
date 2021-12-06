@@ -17,7 +17,7 @@ const { Meta } = Card;
 
 function HelpBoardPage() {
   // 카테고리, 페이지 변경 감지 State
-  const [category, setCategory, categoryRef] = useState("all");
+  const [category, setCategory, categoryRef] = useState("전체");
   const [page, setPage, pageRef] = useState(1);
 
   // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
@@ -26,7 +26,7 @@ function HelpBoardPage() {
   function pageSearch() {
     axios
       .get(
-        `https://withusyoume.herokuapp.com/${process.env.REACT_APP_Backend_Server}/ndhelp?board_category=${categoryRef.current}&page=${pageRef.current}&keyword=`
+        `${process.env.REACT_APP_Backend_Server}ndhelp?board_category=${categoryRef.current}&page=${pageRef.current}&keyword=`
       )
       .then(function (result) {
         // 결과의 포스트 리스트를 추출할 수 있는 변수
@@ -54,7 +54,7 @@ function HelpBoardPage() {
             <a
               className="icon"
               onClick={() => {
-                setCategory("all");
+                setCategory("전체");
                 pageSearch();
               }}
             >
@@ -85,7 +85,7 @@ function HelpBoardPage() {
             <a
               className="icon"
               onClick={() => {
-                setCategory("children");
+                setCategory("아동");
                 pageSearch();
               }}
             >
@@ -98,7 +98,7 @@ function HelpBoardPage() {
             <a
               className="icon"
               onClick={() => {
-                setCategory("lonley");
+                setCategory("고독");
                 pageSearch();
               }}
             >
@@ -129,7 +129,7 @@ function HelpBoardPage() {
                     />
                   }
                   actions={[
-                    <Link to={`/read/${index}`}>
+                    <Link to={`/read?id=${post.board_id}`}>
                       <ReadOutlined key="read" />
                     </Link>,
                     <CheckOutlined key="check" />,

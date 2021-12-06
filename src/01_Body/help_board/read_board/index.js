@@ -1,9 +1,9 @@
 // http://localhost:3000/read?id=17
 
 import "./index.css";
+import axios from "axios";
 import SyncRequest from "sync-request";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
 import {
   Button,
@@ -18,33 +18,22 @@ import { MoreOutlined } from "@ant-design/icons";
 var parse = require("url-parse");
 
 function IndexPage() {
-  const [postDetail, setPostDetail] = useState({
-    board_id: -1,
-    board_writer: "",
-    board_title: "",
-    board_content: "",
-    board_event_time: "",
-    board_start_date: "",
-    board_end_date: "",
-    board_category: "",
-    board_lat: -1,
-    board_lng: -1,
-  });
+  const [postDetail, setPostDetail] = useState({});
 
   useEffect(function () {
-    var res = SyncRequest(
-      "GET",
-      `${process.env.REACT_APP_Backend_Server}/ndhelp/detail?board_id=${
-        parse(document.location.href).query.split("=")[1]
-      }`
-    );
-
-    if (res.statusCode === 200) {
-      console.log(JSON.parse(res.body));
-      setPostDetail(JSON.parse(res.body));
-    } else {
-      alert("잘못된 페이지입니다. 메인으로 이동합니다.");
-    }
+    axios
+      .get(
+        `${process.env.REACT_APP_Backend_Server}ndhelp/detail?board_id=${
+          parse(document.location.href).query.split("=")[1]
+        }`
+      )
+      .then(function (res) {
+        setPostDetail(res.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert("잘못된 페이지입니다. 메인으로 이동합니다.");
+      });
   }, []);
 
   function NaverMapAPI() {
@@ -58,31 +47,76 @@ function IndexPage() {
           height: "300px", // 네이버지도 세로 길이
         }}
         defaultCenter={{
-          lat: postDetail.board_lat,
-          lng: postDetail.board_lng,
+          lat: parseFloat(postDetail.board_lat),
+          lng: parseFloat(postDetail.board_lng),
         }} // 도움 요청자가 지정한 위치
         defaultZoom={13} // 지도 초기 확대 배율
       >
-        <Marker //위치 마커
-          key={1}
-          position={
-            new navermaps.LatLng(postDetail.board_lat, postDetail.board_lng)
-          }
-          //onClick={}
-        />
+        {[postDetail].map(function (mapData, index) {
+          return (
+            <Marker
+              key={index}
+              position={navermaps.LatLng(mapData.board_lat, mapData.board_lng)}
+              animation={1}
+            />
+          );
+        })}
       </NaverMap>
     );
   }
 
-  function handleMenuClick(e) {
-    message.info("Click on menu item.");
-    console.log("click", e);
+  function modifyPost() {
+    if (!(postDetail.board_ndid === sessionStorage.getItem("email"))) {
+      // 자신의 정보를 서버에서 불러옴
+      var res = SyncRequest(
+        "GET",
+        `${process.env.REACT_APP_Backend_Server}ndhelp/detail/put?board_id=${
+          parse(document.location.href).query.split("=")[1]
+        }`
+      );
+
+      if (res.statusCode === 200) {
+        sessionStorage.setItem("post", res.body);
+        window.location.href = `/modify?id=${
+          parse(document.location.href).query.split("=")[1]
+        }`;
+      } else {
+        console.error(res);
+      }
+    } else {
+      alert("본인이 작성한 게시글만 수정이 가능합니다");
+    }
+  }
+
+  function deletePost() {
+    console.log(postDetail);
+
+    if (!(postDetail.board_ndid === sessionStorage.getItem("email"))) {
+      axios
+        .post(`${process.env.REACT_APP_Backend_Server}ndhelp/delete`, {
+          board_id: parse(document.location.href).query.split("=")[1],
+        })
+        .then(function (res) {
+          alert("게시글이 정상적으로 삭제되었습니다.");
+          window.location.href = "/";
+          return;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      alert("본인이 작성한 게시글만 삭제가 가능합니다");
+    }
   }
 
   const menu = (
-    <Menu onClick={handleMenuClick}>
-      <Menu.Item key="1">글 수정하기</Menu.Item>
-      <Menu.Item key="2">글 삭제하기</Menu.Item>
+    <Menu>
+      <Menu.Item key="1" onClick={modifyPost}>
+        글 수정하기
+      </Menu.Item>
+      <Menu.Item key="2" onClick={deletePost}>
+        글 삭제하기
+      </Menu.Item>
     </Menu>
   );
 

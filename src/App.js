@@ -8,6 +8,7 @@ import GVHelpPage from "./01_Body/give_board/index";
 import HelpBoardPage from "./01_Body/help_board/index";
 import WritePage from "./01_Body/help_board/write_board/index";
 import ReadPage from "./01_Body/help_board/read_board/index";
+import ModifyPage from "./01_Body/help_board/modify_board/index";
 import IotApplyPage from "./01_Body/iot_apply/index";
 import RequireBoardPage from "./01_Body/require_board/index";
 import Footer from "./02_Footer/footer/index";
@@ -46,6 +47,10 @@ function App() {
           {/* 도움 요청 게시판 글읽기 */}
           <Route exact path={"/read"}>
             <ReadPage />
+          </Route>
+          {/* 도움 요청 게시판 글읽기 */}
+          <Route exact path={"/modify"}>
+            <ModifyPage />
           </Route>
           {/* 도움 요청 게시판 */}
           <Route exact path={"/ndhelp"}>

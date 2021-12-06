@@ -3,7 +3,8 @@
 import "./index.css";
 import SyncRequest from "sync-request";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import useState from "react-usestateref";
 import DaumPostCode from "react-daum-postcode";
 import { Drawer, Row, Col, Form, Input, Button, Select } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
@@ -12,8 +13,18 @@ import { googleIsLogin } from "../../../module/googleIsLogin";
 import { kakaoIsLogin } from "../../../module/kakaoIsLogin";
 const { Option } = Select;
 const { TextArea } = Input;
+var parse = require("url-parse");
 
-function WritePage() {
+function ModifyPage() {
+  // Drawer 변수 관리할 state
+  const [state, setState] = useState(false);
+  // state
+  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState("");
+  const [addr1, setAddr1] = useState("");
+  const [addr2, setAddr2] = useState("");
+  const [content, setContent] = useState("");
+
   const { Kakao } = window;
 
   // 로그인이 되어있는지 여부에 대한 체크
@@ -23,7 +34,9 @@ function WritePage() {
         .then()
         .catch((err) => {
           alert("인증 정보가 유효하지 않습니다!");
-          window.history.go(-1);
+          window.location.href = `/read?id=${
+            parse(document.location.href).query.split("=")[1]
+          }`;
           return;
         });
     } else if (JSON.parse(sessionStorage.getItem("user"))) {
@@ -31,34 +44,48 @@ function WritePage() {
         .then()
         .catch((err) => {
           alert("인증 정보가 유효하지 않습니다!");
-          window.history.go(-1);
+          window.location.href = `/read?id=${
+            parse(document.location.href).query.split("=")[1]
+          }`;
           return;
         });
     } else {
       alert("로그인이 되어있지 않습니다!");
-      window.history.go(-1);
+      window.location.href = `/read?id=${
+        parse(document.location.href).query.split("=")[1]
+      }`;
       return;
     }
 
     // 사이트를 이용하기 위한 필수 Field들이 서버에 있는지 체크
-    requireFieldCheck(sessionStorage.getItem("email"))
-      .then((res) => {
-        console.log("res");
-      })
-      .catch((err) => {
-        alert(
-          "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
-        );
-        console.log(err);
-        return;
-      });
+    // requireFieldCheck(sessionStorage.getItem("email"))
+    //   .then((res) => {
+    //     console.log("res");
+    //   })
+    //   .catch((err) => {
+    //     alert(
+    //       "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
+    //     );
+    //     window.location.href = `/read?id=${
+    //       parse(document.location.href).query.split("=")[1]
+    //     }`;
+    //     console.log(err);
+    //     return;
+    //   });
+
+    // 해당 게시글이 본인이 작성한 게시글이 맞는지 체크
+
+    // State 기본값
+    setTitle(JSON.parse(sessionStorage.getItem("post")).board_title);
+    setCategory(JSON.parse(sessionStorage.getItem("post")).board_category);
+    setAddr1(
+      JSON.parse(sessionStorage.getItem("post")).board_addr.split("/")[0]
+    );
+    setAddr2(
+      JSON.parse(sessionStorage.getItem("post")).board_addr.split("/")[1]
+    );
+    setContent(JSON.parse(sessionStorage.getItem("post")).board_content);
   });
-
-  // Drawer 변수 관리할 state
-  const [state, setState] = useState(false);
-
-  // Addr 변수 관리할 state
-  const [addr1, setAddr1] = useState("");
 
   // Addr Drawer 관리 함수
   const showDrawer = () => {
@@ -86,18 +113,23 @@ function WritePage() {
     if (JSON.parse(res.body).response.status === "OK") {
       axios
         .post(
-          `${process.env.REACT_APP_Backend_Server}ndhelp/write`,
+          `${process.env.REACT_APP_Backend_Server}ndhelp/detail/put`,
           {
+            board_id: parse(document.location.href).query.split("=")[1],
             board_writer: sessionStorage.getItem("name"),
-            board_ndid: sessionStorage.getItem("email"),
-            board_title: values.title,
-            board_content: values.content,
-            board_category: values.category,
+            // board_ndid: sessionStorage.getItem("email"),
+            board_title: values.title == null ? title : values.title,
+            board_content: values.content == null ? content : values.content,
+            board_category:
+              values.category == null ? category : values.category,
             board_start_date: "2012-12-30 14:11:23",
             board_end_date: "2012-12-30 14:11:23",
             board_lat: JSON.parse(res.body).response.result.point.y,
             board_lng: JSON.parse(res.body).response.result.point.x,
-            board_addr: values.addr1 + "/" + values.addr2,
+            board_addr:
+              (values.addr1 == null ? addr1 : values.addr1) +
+              "/" +
+              (values.addr2 == null ? addr2 : values.addr2),
             board_region1Depth: JSON.parse(res.body).response.refined.structure
               .level1,
             board_region2Depth: JSON.parse(res.body).response.refined.structure
@@ -165,7 +197,11 @@ function WritePage() {
               </Col>
               <Col span={12}>
                 <Form.Item name="category">
-                  <Select defaultValue="카테고리">
+                  <Select
+                    defaultValue={
+                      JSON.parse(sessionStorage.getItem("post")).board_category
+                    }
+                  >
                     <Option value="노인">노인</Option>
                     <Option value="장애인">장애인</Option>
                     <Option value="아동">아동</Option>
@@ -195,18 +231,32 @@ function WritePage() {
                   <Input
                     addonBefore="상세 주소"
                     placeholder="제목을 입력해주세요"
+                    defaultValue={
+                      JSON.parse(
+                        sessionStorage.getItem("post")
+                      ).board_addr.split("/")[1]
+                    }
                   />
                 </Form.Item>
               </Col>
             </Row>
           </Input.Group>
           <Form.Item name="title">
-            <Input addonBefore="제목" placeholder="제목을 입력해주세요" />
+            <Input
+              addonBefore="제목"
+              placeholder="제목을 입력해주세요"
+              defaultValue={
+                JSON.parse(sessionStorage.getItem("post")).board_title
+              }
+            />
           </Form.Item>
           <Form.Item name="content">
             <TextArea
               placeholder="내용을 입력해주세요"
               autoSize={{ minRows: 20, maxRows: 20 }}
+              defaultValue={
+                JSON.parse(sessionStorage.getItem("post")).board_content
+              }
             />
           </Form.Item>
           <Form.Item>
@@ -220,4 +270,4 @@ function WritePage() {
   );
 }
 
-export default WritePage;
+export default ModifyPage;
