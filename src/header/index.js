@@ -231,7 +231,7 @@ function Header() {
               size="large"
               style={btnCSS}
             >
-              내정보
+              내 정보
             </Button>
           </Popover>
         </div>

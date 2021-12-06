@@ -7,6 +7,7 @@ import Iot_apply from "./iot_apply/index";
 import MngMember from "./mngmember/index";
 import MyPage from "./mypage/index";
 import ReadBD from "./help_board/read_board/index";
+import RequireBD from "./require_board/index";
 import Header from "./header/index";
 import Navigation from "./navigation/index";
 import Footer from "./footer/index";
@@ -53,7 +54,7 @@ function App() {
           </Route>
           {/* 게시글 읽기(스타일 보려고 잠깐 여기에 둠) */}
           <Route exact="true" path={"/detail"}>
-            <ReadBD />
+            <RequireBD />
           </Route>
         </Switch>
       </div>
