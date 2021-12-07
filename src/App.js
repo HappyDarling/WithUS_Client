@@ -1,17 +1,18 @@
 import "./App.css";
 import "antd/dist/antd.css";
-import IndexPage from "./index/index";
-import GVHelpPage from "./gvhelp/index";
-import Help_board from "./help_board/index";
-import Iot_apply from "./iot_apply/index";
-import MngMember from "./mngmember/index";
-import MyPage from "./mypage/index";
-import ReadBD from "./help_board/read_board/index";
-import RequireBD from "./require_board/index";
-import Header from "./header/index";
-import Navigation from "./navigation/index";
-import Footer from "./footer/index";
-import { Link, Route, Switch } from "react-router-dom";
+import Header from "./00_Header/header/index";
+import Navigation from "./00_Header/navigation/index";
+import IndexPage from "./01_Body/index/index";
+import MyPage from "./01_Body/mypage/index";
+import GVHelpPage from "./01_Body/give_board/index";
+import HelpBoardPage from "./01_Body/help_board/index";
+import WritePage from "./01_Body/help_board/write_board/index";
+import ReadPage from "./01_Body/help_board/read_board/index";
+import ModifyPage from "./01_Body/help_board/modify_board/index";
+import IotApplyPage from "./01_Body/iot_apply/index";
+import RequireBoardPage from "./01_Body/require_board/index";
+import Footer from "./02_Footer/footer/index";
+import { Route, Switch } from "react-router-dom";
 import { Affix, Button } from "antd";
 
 function App() {
@@ -22,39 +23,46 @@ function App() {
         <Header />
       </div>
       <div id="navigation">
-        {/* 메뉴 (도움요청 게시판, 도움 주기, iot 신청, 마이페이지) */}
+        {/* 메뉴 (도움요청 게시판, 헬프맵, iot 신청, 마이페이지) */}
         <Navigation />
       </div>
-
       <div id="body">
         <Switch>
-          {/* 메인페이지 */}
-          <Route exact="true" path={"/"}>
+          {/* 메인 페이지 */}
+          <Route exact path={"/"}>
             <IndexPage />
           </Route>
-          {/* 도움 요청 게시판 */}
-          <Route exact="true" path={"/ndhelp"}>
-            <Help_board />
+          {/* 필수 정보 요구 페이지 */}
+          <Route exact path={"/require"}>
+            <RequireBoardPage />
           </Route>
-          {/* 도움 주기 */}
-          <Route exact="true" path={"/gvhelp"}>
+          {/* 마이 페이지 */}
+          <Route exact path={"/mypage"}>
+            <MyPage />
+          </Route>
+          {/* 도움 요청 게시판 글쓰기 */}
+          <Route exact path={"/write"}>
+            <WritePage />
+          </Route>
+          {/* 도움 요청 게시판 글읽기 */}
+          <Route exact path={"/read"}>
+            <ReadPage />
+          </Route>
+          {/* 도움 요청 게시판 글읽기 */}
+          <Route exact path={"/modify"}>
+            <ModifyPage />
+          </Route>
+          {/* 도움 요청 게시판 */}
+          <Route exact path={"/ndhelp"}>
+            <HelpBoardPage />
+          </Route>
+          {/* 도움 주기 게시판 */}
+          <Route exact path={"/gvhelp"}>
             <GVHelpPage />
           </Route>
           {/* iot 신청 */}
-          <Route exact="true" path={"/apply"}>
-            <Iot_apply />
-          </Route>
-          {/* 회원 관리 */}
-          <Route exact="true" path={"/mngmember"}>
-            <MngMember />
-          </Route>
-          {/* 마이페이지(스타일 보려고 잠깐 여기에 둠) */}
-          <Route exact="true" path={"/mypage"}>
-            <MyPage />
-          </Route>
-          {/* 게시글 읽기(스타일 보려고 잠깐 여기에 둠) */}
-          <Route exact="true" path={"/detail"}>
-            <RequireBD />
+          <Route exact path={"/apply"}>
+            <IotApplyPage />
           </Route>
         </Switch>
       </div>
@@ -65,7 +73,7 @@ function App() {
       </Affix>
       <div id="footer">
         <Footer />
-      </div>      
+      </div>
     </div>
   );
 }

@@ -1,0 +1,52 @@
+.margin {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.iot-wrapper {
+  width: 100%;
+  padding: 50px;
+  margin-top: 80px;
+  margin-bottom: 100px;
+  border-radius: 30px;
+  background-color: #fff;
+}
+
+#iot-apply-title {
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: center;
+  font-family: "Jua", sans-serif;
+  font-size: 28px;
+}
+
+#iot-introduce {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+#iot-img {
+  text-align: right;
+  display: inline-block;
+  width: 50%;
+  box-sizing: border-box;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+#iot-img img {
+  width: 200px;
+}
+
+#iot-p {
+  text-align: left;
+  display: inline-block;
+  width: 50%;
+  box-sizing: border-box;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+#iot-apply-button {
+  margin: 20px 20px;
+}
