@@ -4,15 +4,9 @@ import useState from "react-usestateref";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
-import { Row, Col, Card, Avatar } from "antd";
+import { Badge, Card } from "antd";
 import { Pagination } from "antd";
-import {
-  ReadOutlined,
-  CheckOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { ReadOutlined, CheckOutlined } from "@ant-design/icons";
 const { Meta } = Card;
 
 function HelpBoardPage() {
@@ -26,7 +20,7 @@ function HelpBoardPage() {
   function pageSearch() {
     axios
       .get(
-        `${process.env.REACT_APP_Backend_Server}ndhelp?board_category=${categoryRef.current}&page=${pageRef.current}&keyword=`
+        `${process.env.REACT_APP_Backend_Server}ndhelp?board_category=${categoryRef.current}&page=${pageRef.current}`
       )
       .then(function (result) {
         // 결과의 포스트 리스트를 추출할 수 있는 변수
@@ -141,7 +135,15 @@ function HelpBoardPage() {
                   }}
                 >
                   <Meta
-                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
+                    avatar={
+                      post.board_close === "1" ? (
+                        <Badge status="success" />
+                      ) : post.board_close === "2" ? (
+                        <Badge status="processing" />
+                      ) : (
+                        <Badge status="error" />
+                      )
+                    }
                     title={post.board_title}
                     description={post.board_writer}
                   />

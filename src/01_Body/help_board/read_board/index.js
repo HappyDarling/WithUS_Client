@@ -5,15 +5,8 @@ import axios from "axios";
 import SyncRequest from "sync-request";
 import React, { useEffect, useState } from "react";
 import { RenderAfterNavermapsLoaded, NaverMap, Marker } from "react-naver-maps";
-import {
-  Button,
-  Avatar,
-  Image,
-  Dropdown,
-  Menu,
-  message,
-  Breadcrumb,
-} from "antd";
+import matchingUser from "../../../module/matchingUser";
+import { Button, Avatar, Image, Dropdown, Menu, Breadcrumb } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 var parse = require("url-parse");
 
@@ -28,6 +21,7 @@ function IndexPage() {
         }`
       )
       .then(function (res) {
+        console.log(res.data);
         setPostDetail(res.data);
       })
       .catch(function (error) {
@@ -66,22 +60,26 @@ function IndexPage() {
   }
 
   function modifyPost() {
-    if (!(postDetail.board_ndid === sessionStorage.getItem("email"))) {
-      // 자신의 정보를 서버에서 불러옴
-      var res = SyncRequest(
-        "GET",
-        `${process.env.REACT_APP_Backend_Server}ndhelp/detail/put?board_id=${
-          parse(document.location.href).query.split("=")[1]
-        }`
-      );
+    if (postDetail.board_ndid === sessionStorage.getItem("email")) {
+      if (postDetail.board_close === "1") {
+        // 자신의 정보를 서버에서 불러옴
+        var res = SyncRequest(
+          "GET",
+          `${process.env.REACT_APP_Backend_Server}ndhelp/detail/put?board_id=${
+            parse(document.location.href).query.split("=")[1]
+          }`
+        );
 
-      if (res.statusCode === 200) {
-        sessionStorage.setItem("post", res.body);
-        window.location.href = `/modify?id=${
-          parse(document.location.href).query.split("=")[1]
-        }`;
+        if (res.statusCode === 200) {
+          sessionStorage.setItem("post", res.body);
+          window.location.href = `/modify?id=${
+            parse(document.location.href).query.split("=")[1]
+          }`;
+        } else {
+          console.error(res);
+        }
       } else {
-        console.error(res);
+        alert("이미 모집이 완료된 게시글은 수정할 수 없습니다.");
       }
     } else {
       alert("본인이 작성한 게시글만 수정이 가능합니다");
@@ -91,19 +89,23 @@ function IndexPage() {
   function deletePost() {
     console.log(postDetail);
 
-    if (!(postDetail.board_ndid === sessionStorage.getItem("email"))) {
-      axios
-        .post(`${process.env.REACT_APP_Backend_Server}ndhelp/delete`, {
-          board_id: parse(document.location.href).query.split("=")[1],
-        })
-        .then(function (res) {
-          alert("게시글이 정상적으로 삭제되었습니다.");
-          window.location.href = "/";
-          return;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    if (postDetail.board_ndid === sessionStorage.getItem("email")) {
+      if (postDetail.board_close === "1") {
+        axios
+          .post(`${process.env.REACT_APP_Backend_Server}ndhelp/delete`, {
+            board_id: parse(document.location.href).query.split("=")[1],
+          })
+          .then(function (res) {
+            alert("게시글이 정상적으로 삭제되었습니다.");
+            window.location.href = "/";
+            return;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        alert("이미 모집이 완료된 게시글은 삭제할 수 없습니다.");
+      }
     } else {
       alert("본인이 작성한 게시글만 삭제가 가능합니다");
     }
@@ -153,7 +155,14 @@ function IndexPage() {
                 <br />
                 {postDetail.board_start_date} ~ {postDetail.board_end_date}
                 <Button
-                  //onClick={}
+                  onClick={() => {
+                    matchingUser(
+                      postDetail.board_id,
+                      postDetail.board_ndid,
+                      sessionStorage.getItem("email"),
+                      postDetail.board_close
+                    );
+                  }}
                   size="middle"
                   style={{ marginTop: "10px" }}
                 >

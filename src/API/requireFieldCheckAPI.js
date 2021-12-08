@@ -5,7 +5,7 @@ const requireFieldCheck = (email) => {
   return new Promise(function (resolve, reject) {
     var res = SyncRequest(
       "POST",
-      `${process.env.API_URL_RequireFieldCheck}/${email}`
+      `${process.env.REACT_APP_Backend_Server_User}/${email}`
     );
 
     if (res.status === 200) {

@@ -11,7 +11,9 @@ import ReadPage from "./01_Body/help_board/read_board/index";
 import ModifyPage from "./01_Body/help_board/modify_board/index";
 import IotApplyPage from "./01_Body/iot_apply/index";
 import RequireBoardPage from "./01_Body/require_board/index";
+import ManagePage from "./01_Body/manage_board/index";
 import Footer from "./02_Footer/footer/index";
+import KoChatBot from "./03_Bot/KoChatBot/index";
 import { Route, Switch } from "react-router-dom";
 import { Affix, Button } from "antd";
 
@@ -63,6 +65,14 @@ function App() {
           {/* iot 신청 */}
           <Route exact path={"/apply"}>
             <IotApplyPage />
+          </Route>
+          {/* 회원 관리 페이지 */}
+          <Route exact path={"/mngmember"}>
+            <ManagePage />
+          </Route>
+          {/* 챗봇 페이지 */}
+          <Route exact path={"/kochat"}>
+            <KoChatBot />
           </Route>
         </Switch>
       </div>

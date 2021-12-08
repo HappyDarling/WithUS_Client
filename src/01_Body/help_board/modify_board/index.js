@@ -58,20 +58,20 @@ function ModifyPage() {
     }
 
     // 사이트를 이용하기 위한 필수 Field들이 서버에 있는지 체크
-    // requireFieldCheck(sessionStorage.getItem("email"))
-    //   .then((res) => {
-    //     console.log("res");
-    //   })
-    //   .catch((err) => {
-    //     alert(
-    //       "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
-    //     );
-    //     window.location.href = `/read?id=${
-    //       parse(document.location.href).query.split("=")[1]
-    //     }`;
-    //     console.log(err);
-    //     return;
-    //   });
+    requireFieldCheck(sessionStorage.getItem("email"))
+      .then((res) => {
+        console.log("res");
+      })
+      .catch((err) => {
+        alert(
+          "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
+        );
+        window.location.href = `/read?id=${
+          parse(document.location.href).query.split("=")[1]
+        }`;
+        console.log(err);
+        return;
+      });
 
     // 해당 게시글이 본인이 작성한 게시글이 맞는지 체크
 
@@ -85,6 +85,7 @@ function ModifyPage() {
       JSON.parse(sessionStorage.getItem("post")).board_addr.split("/")[1]
     );
     setContent(JSON.parse(sessionStorage.getItem("post")).board_content);
+    sessionStorage.removeItem("post");
   });
 
   // Addr Drawer 관리 함수
@@ -117,7 +118,7 @@ function ModifyPage() {
           {
             board_id: parse(document.location.href).query.split("=")[1],
             board_writer: sessionStorage.getItem("name"),
-            // board_ndid: sessionStorage.getItem("email"),
+            board_ndid: sessionStorage.getItem("email"),
             board_title: values.title == null ? title : values.title,
             board_content: values.content == null ? content : values.content,
             board_category:

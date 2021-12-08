@@ -1,19 +1,23 @@
 import "./index.css";
 import React from "react";
-import { Image, Switch, List, Avatar, Menu, Dropdown } from "antd";
+import {
+  Image,
+  Switch,
+  List,
+  Avatar,
+  Menu,
+  Dropdown,
+  Radio,
+  Modal,
+  Button,
+  Input,
+  Form,
+  DatePicker,
+} from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
-function MyPage() {
-  function onChange(checked) {
-    console.log(`switch to ${checked}`);
-  }
-
-  const [disabled, setDisabled] = React.useState(true);
-
-  const toggle = () => {
-    setDisabled(!disabled);
-  };
-
+function IndexPage() {
+  //예시데이터 (게시글)
   const post_detail = {
     board_id: 1,
     board_writer: "김테스트",
@@ -49,13 +53,150 @@ function MyPage() {
     iot: "Y",
   };
 
-  const menu = (
-    <Menu
-    //onClick={}
-    >
-      <Menu.Item key="1">내 정보 수정하기</Menu.Item>
-    </Menu>
-  );
+  function onChange(checked) {
+    console.log(`switch to ${checked}`);
+  }
+
+  const [disabled, setDisabled] = React.useState(true);
+
+  const toggle = () => {
+    setDisabled(!disabled);
+  };
+
+  const options = [
+    { label: "전체", value: "전체" },
+    { label: "모집", value: "모집" },
+    { label: "지원", value: "지원" },
+  ];
+
+  class RadioBtn extends React.Component {
+    state = {
+      value: "전체",
+    };
+
+    onRadioChange = (e) => {
+      console.log("radio checked", e.target.value);
+      this.setState({
+        value: e.target.value,
+      });
+    };
+
+    render() {
+      const { value } = this.state;
+      return (
+        <Radio.Group
+          options={options}
+          onChange={this.onRadioChange}
+          value={value}
+          optionType="button"
+          buttonStyle="solid"
+        />
+      );
+    }
+  }
+
+  class ProfileModify extends React.Component {
+    state = {
+      visible: false,
+    };
+
+    showModal = () => {
+      this.setState({
+        visible: true,
+      });
+    };
+
+    handleCancel = () => {
+      this.setState({ visible: false });
+    };
+
+    render() {
+      const { visible } = this.state;
+
+      //수정된 개인정보 db에 업데이트
+      const onModify = (values) => {
+        console.log("Success:", values);
+      };
+
+      const onModifyFailed = (errorInfo) => {
+        console.log("Failed:", errorInfo);
+      };
+
+      const menu = (
+        <Menu onClick={this.showModal}>
+          <Menu.Item key="1">내 정보 수정하기</Menu.Item>
+        </Menu>
+      );
+
+      return (
+        <>
+          <Dropdown overlay={menu} placement="bottomRight">
+            <a
+              className="ant-dropdown-link"
+              onClick={(e) => e.preventDefault()}
+            >
+              <MoreOutlined />
+            </a>
+          </Dropdown>
+          <Modal
+            visible={visible}
+            title="내 정보 수정"
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            footer={[
+              <Button key="back" onClick={this.handleCancel}>
+                취소
+              </Button>,
+            ]}
+          >
+            <Form
+              name="myinfo"
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 16 }}
+              onFinish={onModify}
+              onFinishFailed={onModifyFailed}
+              style={{ marginTop: "30px" }}
+              autoComplete="off"
+            >
+              <Form.Item
+                label="이름 : "
+                name="name"
+                rules={[{ required: true, message: "이름을 입력해주세요!" }]}
+              >
+                <Input placeholder={mypage_info.name} />
+              </Form.Item>
+
+              <Form.Item
+                label="생년월일 : "
+                name="birth"
+                rules={[
+                  { required: true, message: "생년월일을 입력해주세요!" },
+                ]}
+              >
+                <DatePicker
+                  placeholder={mypage_info.birth}
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="성별 : "
+                name="sex"
+                rules={[{ required: true, message: "성별을 입력해주세요!" }]}
+              >
+                <Input placeholder={mypage_info.sex} />
+              </Form.Item>
+              <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                  수정하기
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
+        </>
+      );
+    }
+  }
 
   function Profile() {
     return (
@@ -70,16 +211,9 @@ function MyPage() {
           </td>
         </tr>
         <tr>
-          <td id="profile-table-info-title">MY INFO</td>
+          <td id="profile-table-info-title">내 정보</td>
           <td id="profile-table-info-ddbutton">
-            <Dropdown overlay={menu} placement="bottomRight">
-              <a
-                className="ant-dropdown-link"
-                onClick={(e) => e.preventDefault()}
-              >
-                <MoreOutlined />
-              </a>
-            </Dropdown>
+            <ProfileModify />
           </td>
         </tr>
         <tr>
@@ -123,12 +257,11 @@ function MyPage() {
   function MyPost() {
     return (
       <div id="mypost-div">
+        <div id="mypost-radiobtn-div">
+          <RadioBtn />
+        </div>
         <List
-          style={{
-            backgroundColor: "#fff",
-            padding: "20px",
-            borderRadius: "30px",
-          }}
+          style={{ backgroundColor: "#fff", padding: "20px" }}
           itemLayout="vertical"
           size="large"
           pagination={{
@@ -179,4 +312,4 @@ function MyPage() {
   );
 }
 
-export default MyPage;
+export default IndexPage;

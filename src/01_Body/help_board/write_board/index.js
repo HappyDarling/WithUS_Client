@@ -1,4 +1,5 @@
 // 반드시 Heroku Server WakeUp 한 뒤 진행
+// 반드시 도로명 주소로 진행
 
 import "./index.css";
 import SyncRequest from "sync-request";
@@ -49,7 +50,7 @@ function WritePage() {
         alert(
           "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
         );
-        console.log(err);
+        window.location.href = "/require";
         return;
       });
   });
@@ -108,11 +109,14 @@ function WritePage() {
           }
         )
         .then(function (result) {
-          // 결과의 포스트 리스트를 추출할 수 있는 변수
           console.log(result);
+          alert("게시글이 정상적으로 등록되었습니다.");
+          window.location.href = "/ndhelp";
+          return;
         })
         .catch(function (error) {
           console.error(error);
+          return;
         });
     } else {
       console.error(res.body);
