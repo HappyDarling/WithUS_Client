@@ -55,7 +55,7 @@ function MyPage() {
 
   const options = [
     { label: '전체', value: '전체' },
-    { label: '모집', value: '모집' },
+    { label: '요청', value: '요청' },
     { label: '지원', value: '지원' },
   ];  
 
