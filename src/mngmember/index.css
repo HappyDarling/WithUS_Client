@@ -1,0 +1,16 @@
+.margin {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .mng-wrapper {
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  
+  #mng-member-title {
+    margin: 20px 20px;
+    font-family: "Jua", sans-serif;
+    font-size: 28px;
+  }
