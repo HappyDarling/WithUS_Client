@@ -285,7 +285,7 @@ function MyPage() {
                   alt="logo"
                   src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
                 />
-                <div id="volunteerer-info-btn">
+                <div id="volunteer-info-btn">
                   <Button size="small">
                     지원자 정보
                   </Button>
@@ -333,7 +333,7 @@ function MyPage() {
                   alt="logo"
                   src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
                 />
-                <div id="volunteerer-info-btn">
+                <div id="volunteer-info-btn">
                   <Button size="small">
                     지원자 정보
                   </Button>
