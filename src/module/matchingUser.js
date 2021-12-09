@@ -48,6 +48,7 @@ function matchingUser(bId, ndId, gvId, cls) {
             })
             .then(function (result) {
               alert("지원에 성공하였습니다.");
+              window.history.go(0);
               console.log(result);
             })
             .catch(function (error) {
