@@ -144,20 +144,25 @@ function GVHelpPage() {
             )}
           </Descriptions.Item>
         </Descriptions>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-around",
-            marginTop: "20px",
-          }}
-        >
-          <Button size="large" onClick={onReadPostBtn}>
-            게시글로
-          </Button>
-          <Button type="primary" size="large" onClick={onApplyBtn}>
-            지원하기
-          </Button>
-        </div>
+
+        {cls === "1" ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              marginTop: "20px",
+            }}
+          >
+            <Button size="large" onClick={onReadPostBtn}>
+              게시글로
+            </Button>
+            <Button type="primary" size="large" onClick={onApplyBtn}>
+              지원하기
+            </Button>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </Drawer>
       <RenderAfterNavermapsLoaded
         ncpClientId={process.env.REACT_APP_Naver_API_KEY} // 자신의 네이버 계정에서 발급받은 Client ID
