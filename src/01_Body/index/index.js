@@ -3,20 +3,21 @@ import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Carousel } from "antd";
+import { Image } from "antd";
 import { Card, Avatar } from "antd";
 import { CheckOutlined, ReadOutlined } from "@ant-design/icons";
 require("dotenv");
 const { Meta } = Card;
 
 function IndexPage() {
-  const contentStyle = {
-    height: "240px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-  };
 
+  const contentStyle = {
+    height: '160px',
+    color: '#fff',
+    lineHeight: '160px',
+    textAlign: 'center',
+    background: '#364d79',
+  };
   // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
   const [postList, setPostList] = React.useState({ data: [] });
   React.useEffect(function () {
@@ -39,16 +40,25 @@ function IndexPage() {
         <div id="carousel">
           <Carousel autoplay>
             <div>
-              <h3 style={contentStyle}>1</h3>
+              <Image
+                width={'100%'}
+                src="./images/slider_img/slider_help_board.png"
+                actions={[
+                  <Link to="/ndhelp" />
+                ]}
+              />
             </div>
             <div>
-              <h3 style={contentStyle}>2</h3>
+            <Image
+                width={'100%'}
+                src="./images/slider_img/slider_give_board.png"
+                actions={[
+                  <Link to="/gvhelp" />
+                ]}
+              />
             </div>
             <div>
               <h3 style={contentStyle}>3</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>4</h3>
             </div>
           </Carousel>
         </div>

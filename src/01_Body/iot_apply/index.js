@@ -7,27 +7,27 @@ function IotAppplyPage() {
     <div>
       {/* <!-- container --> */}
       <div className="container">
-        <div className="iot-wrapper">
-          <div id="iot-apply-title">
-              <p>IOT 신청하기</p>
-          </div>
+        <div id="iot-title">
+          <p>IOT 신청하기</p>
+        </div>
+        <div id="iot-wrapper">          
           <div id="iot-introduce">
-            <div id="iot-img">
-              <img src="./images/iot_img.png" alt="iot 사진"></img>
+            <div id="iot-introduce-left">
+              <img src="./images/iot_img/iot_icon.png" id="iot-img" alt="iot 사진"></img>
             </div>
-            <div id="iot-p">
-              <p>
+            <div id="iot-introduce-right">
+              <p id="iot-p">
                 이 iot를 설치하세요!
                 <br />
                 당신에게 도움이 될 것입니다.
               </p>
             </div>
           </div>
-          <div id="iot-apply-button">
+          <div id="iot-button">
             <Button
-              type="primary"
               //onClick={}
               size="large"
+              type="primary"
             >
               <span>신청하기</span>
             </Button>

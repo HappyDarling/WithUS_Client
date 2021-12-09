@@ -9,9 +9,6 @@ import { Pagination } from "antd";
 import {
   ReadOutlined,
   CheckOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
 } from "@ant-design/icons";
 const { Meta } = Card;
 
@@ -58,7 +55,7 @@ function HelpBoardPage() {
                 pageSearch();
               }}
             >
-              <img src="./images/icon/icon_all.png" alt="전체" />
+              <img src="./images/board_icon/icon_all.png" alt="전체" />
             </a>
             <a
               className="icon"
@@ -67,7 +64,7 @@ function HelpBoardPage() {
                 pageSearch();
               }}
             >
-              <img src="./images/icon/icon_elderly.png" alt="노인" />
+              <img src="./images/board_icon/icon_elderly.png" alt="노인" />
             </a>
             <a
               className="icon"
@@ -77,7 +74,7 @@ function HelpBoardPage() {
               }}
             >
               <img
-                src="./images/icon/icon_disabled.png"
+                src="./images/board_icon/icon_disabled.png"
                 alt="장애인"
                 width="100px"
               />
@@ -90,7 +87,7 @@ function HelpBoardPage() {
               }}
             >
               <img
-                src="./images/icon/icon_children.png"
+                src="./images/board_icon/icon_children.png"
                 alt="어린이"
                 width="100px"
               />
@@ -103,7 +100,7 @@ function HelpBoardPage() {
               }}
             >
               <img
-                src="./images/icon/icon_lonley.png"
+                src="./images/board_icon/icon_lonley.png"
                 alt="고독"
                 width="100px"
               />
