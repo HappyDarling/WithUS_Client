@@ -14,7 +14,9 @@ function HelpBoardPage() {
   const [page, setPage, pageRef] = useState(1);
 
   // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
-  const [postList, setPostList] = useState({ data: [] });
+  const [postList, setPostList, postListRef] = useState({ data: [] });
+
+  const [total, setTotal, totalRef] = useState(1);
 
   function pageSearch() {
     axios
@@ -26,6 +28,7 @@ function HelpBoardPage() {
         console.log(result);
         const posts = result;
         setPostList(posts);
+        setTotal(postListRef.current.data[0].totalnum);
       })
       .catch(function (error) {
         console.error(error);
@@ -165,7 +168,7 @@ function HelpBoardPage() {
             simple
             defaultCurrent={1}
             defaultPageSize={9}
-            total={1}
+            total={totalRef.current}
             onChange={function (curr_page, number) {
               setPage(curr_page);
               pageSearch();

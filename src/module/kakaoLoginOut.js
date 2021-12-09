@@ -61,7 +61,7 @@ const KakaoLogout = () => {
       }
       Kakao.Auth.logout(() => {
         sessionStorage.clear();
-        window.history.go(0);
+        window.location.href = "/";
       });
     });
   } catch (err) {

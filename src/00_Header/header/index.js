@@ -68,7 +68,7 @@ function Header() {
   const onLogoutGoogle = (auth) => {
     sessionStorage.clear();
     localStorage.clear();
-    window.history.go(0);
+    window.location.href = "/";
   };
 
   // 각 SNS별 로그아웃 기능
