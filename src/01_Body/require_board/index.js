@@ -50,6 +50,7 @@ function RequireBoardPage() {
         )
         .then(function (result) {
           alert("정상적으로 내 정보 저장이 완료되었습니다!");
+          window.location.href = "/";
         })
         .catch(function (error) {
           alert("정보 저장 중 오류가 발생하였습니다.");

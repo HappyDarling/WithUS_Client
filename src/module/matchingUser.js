@@ -34,38 +34,43 @@ function matchingUser(bId, ndId, gvId, cls) {
   }
 
   // 사이트를 이용하기 위한 필수 Field들이 서버에 있는지 체크
-  // requireFieldCheck(sessionStorage.getItem("email"))
-  //   .then((res) => {
-  //     alert("성공");
-  //     console.log("res");
-  //   })
-  //   .catch((err) => {
-  //     alert(
-  //       "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
-  //     );
-  //     window.location.href = "/require";
-  //     return;
-  //   });
-
-  if (ndId === gvId) {
-    alert("자기 자신에게는 도움을 줄 수 없습니다.");
-    return;
-  } else {
-    axios
-      .post(`${process.env.REACT_APP_Backend_Server}ndhelp/match`, {
-        board_id: bId,
-        board_gvid: gvId,
-      })
-      .then(function (result) {
-        alert("지원에 성공하였습니다.");
-        console.log(result);
-      })
-      .catch(function (error) {
-        alert("지원에 실패하였습니다.");
-        alert(error);
-        console.error(error);
-      });
-  }
+  requireFieldCheck(sessionStorage.getItem("email"))
+    .then((res) => {
+      if (res === true) {
+        if (ndId === gvId) {
+          alert("자기 자신에게는 도움을 줄 수 없습니다.");
+          return;
+        } else {
+          axios
+            .post(`${process.env.REACT_APP_Backend_Server}ndhelp/match`, {
+              board_id: bId,
+              board_gvid: gvId,
+            })
+            .then(function (result) {
+              alert("지원에 성공하였습니다.");
+              console.log(result);
+            })
+            .catch(function (error) {
+              alert("지원에 실패하였습니다.");
+              alert(error);
+              console.error(error);
+            });
+        }
+        return;
+      } else if (res === false) {
+        alert(
+          "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
+        );
+        window.location.href = "/require";
+        return;
+      }
+    })
+    .catch((err) => {
+      alert("에러가 발생하였습니다.");
+      console.log(err);
+      window.location.href = "/";
+      return;
+    });
 }
 
 export default matchingUser;

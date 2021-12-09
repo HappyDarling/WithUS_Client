@@ -10,9 +10,9 @@ const requireFieldCheck = (email) => {
 
     console.log(res);
 
-    if (res.status === 200) {
+    if (res.statusCode === 200) {
       resolve(true);
-    } else if (res.status === 400) {
+    } else if (res.statusCode === 400) {
       resolve(false);
     } else {
       reject(res);

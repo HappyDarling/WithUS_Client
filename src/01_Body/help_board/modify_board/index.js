@@ -60,16 +60,20 @@ function ModifyPage() {
     // 사이트를 이용하기 위한 필수 Field들이 서버에 있는지 체크
     requireFieldCheck(sessionStorage.getItem("email"))
       .then((res) => {
-        console.log("res");
+        if (res === true) {
+          return;
+        } else if (res === false) {
+          alert(
+            "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
+          );
+          window.location.href = "/require";
+          return;
+        }
       })
       .catch((err) => {
-        alert(
-          "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
-        );
-        window.location.href = `/read?id=${
-          parse(document.location.href).query.split("=")[1]
-        }`;
+        alert("에러가 발생하였습니다.");
         console.log(err);
+        window.location.href = "/";
         return;
       });
 
@@ -85,7 +89,7 @@ function ModifyPage() {
       JSON.parse(sessionStorage.getItem("post")).board_addr.split("/")[1]
     );
     setContent(JSON.parse(sessionStorage.getItem("post")).board_content);
-    sessionStorage.removeItem("post");
+    // sessionStorage.removeItem("post");
   });
 
   // Addr Drawer 관리 함수

@@ -10,6 +10,11 @@ const signUp = () => {
           email,
           name: "",
           birth: "nu ll 00 0000",
+          lat: "",
+          lng: "",
+          addr: "",
+          region1Depth: "",
+          region2Depth: "",
           sex: "",
         })
         .then(function (result) {

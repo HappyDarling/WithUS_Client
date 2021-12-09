@@ -3,10 +3,9 @@ import React, { useEffect } from "react";
 import useState from "react-usestateref";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
-import { Badge, Card } from "antd";
-import { Pagination } from "antd";
+import { Card, Avatar, Button, Pagination } from "antd";
 import { ReadOutlined, CheckOutlined } from "@ant-design/icons";
+import matchingUser from "../../module/matchingUser";
 const { Meta } = Card;
 
 function HelpBoardPage() {
@@ -131,7 +130,18 @@ function HelpBoardPage() {
                     <Link to={`/read?id=${post.board_id}`}>
                       <ReadOutlined key="read" />
                     </Link>,
-                    <CheckOutlined key="check" />,
+                    <CheckOutlined
+                      key="check"
+                      // BoardID, needEmail, myEmail, CloseTF
+                      onClick={() => {
+                        matchingUser(
+                          post.board_id,
+                          post.board_ndid,
+                          sessionStorage.getItem("email"),
+                          post.board_close
+                        );
+                      }}
+                    />,
                   ]}
                   style={{
                     width: "30%",
@@ -140,15 +150,7 @@ function HelpBoardPage() {
                   }}
                 >
                   <Meta
-                    avatar={
-                      post.board_close === "1" ? (
-                        <Badge status="success" />
-                      ) : post.board_close === "2" ? (
-                        <Badge status="processing" />
-                      ) : (
-                        <Badge status="error" />
-                      )
-                    }
+                    avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
                     title={post.board_title}
                     description={post.board_writer}
                   />

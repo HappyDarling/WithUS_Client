@@ -1,5 +1,8 @@
 import "./index.css";
-import React from "react";
+import axios from "axios";
+import SyncRequest from "sync-request";
+import React, { useEffect, useState } from "react";
+import convertMonth from "../../module/convertMonth";
 import {
   Image,
   Switch,
@@ -17,6 +20,35 @@ import {
 import { MoreOutlined } from "@ant-design/icons";
 
 function MyPage() {
+  var [name, setName] = useState("");
+  var [email, setEmail] = useState("");
+  var [birth, setBirth] = useState("");
+  var [sex, setSex] = useState("");
+  var [iot, setIot] = useState(false);
+
+  useEffect(function () {
+    var res = SyncRequest(
+      "GET",
+      `${
+        process.env.REACT_APP_Backend_Server_User
+      }api/user/fbe/${sessionStorage.getItem("email")}`
+    );
+
+    setName(JSON.parse(res.body).name);
+    setEmail(JSON.parse(res.body).email);
+    setSex(JSON.parse(res.body).sex);
+    setIot(JSON.parse(res.body).iot);
+
+    console.log(JSON.parse(res.body).birth.split(" "));
+    setBirth(
+      JSON.parse(res.body).birth.split(" ")[3] +
+        "/" +
+        convertMonth(JSON.parse(res.body).birth.split(" ")[1]) +
+        "/" +
+        JSON.parse(res.body).birth.split(" ")[2]
+    );
+  });
+
   //예시데이터 (게시글)
   const post_detail = {
     board_id: 1,
@@ -42,16 +74,6 @@ function MyPage() {
       content: post_detail.board_content,
     });
   }
-
-  //예시 데이터 (유저)
-  const mypage_info = {
-    idx: 1,
-    name: "김테스트",
-    email: "123@gmail.com",
-    birth: "1983/09/12",
-    sex: "남성",
-    iot: "Y",
-  };
 
   function onChange(checked) {
     console.log(`switch to ${checked}`);
@@ -115,11 +137,34 @@ function MyPage() {
 
       //수정된 개인정보 db에 업데이트
       const onModify = (values) => {
+        var data = {
+          name: values.name,
+          birth: values.birth._d.toString(),
+          sex: values.sex,
+        };
+        axios
+          .put(
+            `${
+              process.env.REACT_APP_Backend_Server_User
+            }api/user/update/${sessionStorage.getItem("email")}`,
+            data,
+            {
+              headers: { "Content-Type": `application/json` },
+            }
+          )
+          .then(function (result) {
+            alert("정상적으로 내 정보 저장이 완료되었습니다!");
+            window.history.go(0);
+          })
+          .catch(function (error) {
+            alert("정보 저장 중 오류가 발생하였습니다.");
+            console.error(error);
+          });
         console.log("Success:", values);
       };
 
       const onModifyFailed = (errorInfo) => {
-        console.log("Failed:", errorInfo);
+        console.error("Failed:", errorInfo);
       };
 
       const menu = (
@@ -163,7 +208,7 @@ function MyPage() {
                 name="name"
                 rules={[{ required: true, message: "이름을 입력해주세요!" }]}
               >
-                <Input placeholder={mypage_info.name} />
+                <Input placeholder={name} />
               </Form.Item>
 
               <Form.Item
@@ -173,10 +218,7 @@ function MyPage() {
                   { required: true, message: "생년월일을 입력해주세요!" },
                 ]}
               >
-                <DatePicker
-                  placeholder={mypage_info.birth}
-                  style={{ width: "100%" }}
-                />
+                <DatePicker placeholder={birth} style={{ width: "100%" }} />
               </Form.Item>
 
               <Form.Item
@@ -184,7 +226,7 @@ function MyPage() {
                 name="sex"
                 rules={[{ required: true, message: "성별을 입력해주세요!" }]}
               >
-                <Input placeholder={mypage_info.sex} />
+                <Input placeholder={sex} />
               </Form.Item>
               <Form.Item wrapperCol={{ offset: 16, span: 16 }}>
                 <Button type="primary" htmlType="submit">
@@ -218,28 +260,26 @@ function MyPage() {
         </tr>
         <tr>
           <td colSpan="2" id="profile-table-info">
-            {mypage_info.name}
+            {name}
           </td>
         </tr>
         <tr>
           <td colSpan="2" id="profile-table-info">
-            {mypage_info.email}
+            {email}
           </td>
         </tr>
         <tr>
           <td colSpan="2" id="profile-table-info">
-            {mypage_info.birth}
+            {birth}
           </td>
         </tr>
         <tr>
           <td colSpan="2" id="profile-table-info">
-            {mypage_info.sex}
+            {sex}
           </td>
         </tr>
         <tr>
-          <td id="profile-table-info-iot">
-            IOT 신청여부 :&nbsp;{mypage_info.iot}
-          </td>
+          <td id="profile-table-info-iot">IOT 신청여부 :&nbsp;{iot}</td>
           <td id="profile-table-info-bottom">
             <Switch
               //disabled={disabled} //IOT 신청 안한 사람의 경우 disabled
