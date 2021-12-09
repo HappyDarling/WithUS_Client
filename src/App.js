@@ -1,6 +1,5 @@
 import "./App.css";
 import "antd/dist/antd.css";
-<<<<<<< HEAD
 import Header from "./00_Header/header/index";
 import Navigation from "./00_Header/navigation/index";
 import IndexPage from "./01_Body/index/index";
@@ -12,22 +11,16 @@ import ReadPage from "./01_Body/help_board/read_board/index";
 import ModifyPage from "./01_Body/help_board/modify_board/index";
 import IotApplyPage from "./01_Body/iot_apply/index";
 import RequireBoardPage from "./01_Body/require_board/index";
+import ManagePage from "./01_Body/manage_board/index";
 import Footer from "./02_Footer/footer/index";
+import KoChatBot from "./03_Bot/KoChatBot/index";
+import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
-=======
-import IndexPage from "./index/index";
-import GVHelpPage from "./gvhelp/index";
-import Help_board from "./help_board/index";
-import Iot_apply from "./iot_apply/index";
-import MngMember from "./mngmember/index";
-import MyPage from "./mypage/index";
-import Header from "./header/index";
-import Navigation from "./navigation/index";
-import { Link, Route, Switch } from "react-router-dom";
->>>>>>> 455cd16846ed7c9c18f8fe821bb81a3c485e6895
-import { Affix, Button } from "antd";
+import { Affix, Button, Popover } from "antd";
 
 function App() {
+  const [bot, setBot] = useState(false);
+
   return (
     <div>
       <div id="header">
@@ -76,25 +69,34 @@ function App() {
           <Route exact path={"/apply"}>
             <IotApplyPage />
           </Route>
-          {/* 회원 관리 */}
-          <Route exact="true" path={"/mngmember"}>
-            <MngMember />
-          </Route>
-          {/* 마이페이지 */}
-          <Route exact="true" path={"/mypage"}>
-            <MyPage />
+          {/* 회원 관리 페이지 */}
+          <Route exact path={"/mngmember"}>
+            <ManagePage />
           </Route>
         </Switch>
       </div>
-<<<<<<< HEAD
       <Affix offsetBottom={10} style={{ position: "absolute", right: 10 }}>
-=======
-      <div id="footer"></div>
-      <Affix offsetBottom={10} style={{ position: "absolute", right: 50 }}>
->>>>>>> 455cd16846ed7c9c18f8fe821bb81a3c485e6895
-        <Button type="primary" onClick={() => console.log("TALKBOT CLICK")}>
-          TALKBOT
-        </Button>
+        <Popover
+          placement="topRight"
+          trigger="click"
+          content={
+            <div style={{ width: "450px", height: "500px" }}>
+              <KoChatBot />
+            </div>
+          }
+        >
+          <Button
+            type="primary"
+            onClick={() => {
+              if (bot === false) {
+                window.greet();
+                setBot(true);
+              }
+            }}
+          >
+            TALKBOT
+          </Button>
+        </Popover>
       </Affix>
       <div id="footer">
         <Footer />

@@ -1,4 +1,5 @@
 import React from "react";
+import { signUp } from "../API/signUp";
 
 const { Kakao } = window;
 
@@ -12,7 +13,12 @@ const loginWithKakao = () => {
       Kakao.Auth.login({
         success: (auth) => {
           sessionStorage.setItem("user", JSON.stringify(auth));
-          window.history.go(0);
+          signUp()
+            .then((res) => {
+              console.log(res);
+              window.history.go(0);
+            })
+            .catch((err) => console.error(err));
         },
         fail: (error) => {
           console.error(error);

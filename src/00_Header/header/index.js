@@ -2,11 +2,18 @@ import "./index.css";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Popover, Modal, Button } from "antd";
+import { signUp } from "../../API/signUp";
+import { isAdmin } from "../../API/isAdmin";
 import { googleIsLogin } from "../../module/googleIsLogin";
 import { kakaoIsLogin } from "../../module/kakaoIsLogin";
 import { KakaoLogin, KakaoLogout } from "../../module/kakaoLoginOut";
 import GoogleLogin, { GoogleLogout } from "react-google-login";
-import { UserOutlined, MehOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  MehOutlined,
+  LogoutOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 require("dotenv");
 
 function Header() {
@@ -14,35 +21,25 @@ function Header() {
 
   // Login State 관리
   const [isLogin, setIsLogin] = useState(false);
+  // Admin State 관리
+  const [isAd, setIsAd] = useState(false);
 
   useEffect(() => {
     // 카카오 로그인 유지 (자체 함수 Validation)
     if (Kakao.Auth.getAccessToken()) {
       kakaoIsLogin().then((res) => {
         setIsLogin(res);
+        isAdmin(sessionStorage.getItem("email")).then((res) => setIsAd(res));
       });
     }
     // 구글 로그인 유지 (Sync 통신으로 Access Token Validation)
     else if (JSON.parse(sessionStorage.getItem("user"))) {
       googleIsLogin().then((res) => {
         setIsLogin(res);
+        isAdmin(sessionStorage.getItem("email")).then((res) => setIsAd(res));
       });
     }
   });
-
-  // API KEY
-  const REACT_APP_GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
-
-  // 비 로그인 상태에서 로그인 버튼을 클릭시 표시될 로고 스타일
-  let login_view_logoStyle = {
-    display: "block",
-    margin: "0px auto",
-  };
-
-  // 내 정보 Style
-  let myInfo = { textAlign: "center", fontFamily: "Jua", fontSize: "20px" };
-  // popover 버튼 Style
-  let btn = { width: "200px", marginTop: "10px" };
 
   // Modal의 useState 관리
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -56,8 +53,12 @@ function Header() {
 
   const onSuccessGoogle = (auth) => {
     sessionStorage.setItem("user", JSON.stringify(auth));
-    console.log(auth);
-    window.history.go(0);
+    signUp()
+      .then((res) => {
+        console.log(res);
+        window.history.go(0);
+      })
+      .catch((err) => console.error(err));
   };
 
   const onFailureGoogle = (err) => {
@@ -74,10 +75,14 @@ function Header() {
   const googleLogout = (
     <div>
       <GoogleLogout
-        clientId={REACT_APP_GOOGLE_API_KEY}
+        clientId={process.env.REACT_APP_GOOGLE_API_KEY}
         render={(renderProps) => (
-          <a href="{() => false}" onClick={renderProps.onClick}>
-            <Button icon={<LogoutOutlined />} size="large" style={btn}>
+          <a href={() => false} onClick={renderProps.onClick}>
+            <Button
+              icon={<LogoutOutlined />}
+              size="large"
+              style={{ width: "200px", marginTop: "10px" }}
+            >
               로그아웃
             </Button>
           </a>
@@ -88,16 +93,41 @@ function Header() {
   );
   const kakaoLogout = (
     <div>
-      <a href="{() => false}" id="custom-login-btn" onClick={KakaoLogout}>
-        <Button icon={<LogoutOutlined />} size="large" style={btn}>
+      <a href={() => false} id="custom-login-btn" onClick={KakaoLogout}>
+        <Button
+          icon={<LogoutOutlined />}
+          size="large"
+          style={{ width: "200px", marginTop: "10px" }}
+        >
           로그아웃
         </Button>
       </a>
     </div>
   );
 
+  // 관리자를 위한 관리페이지 접속 버튼
+  const mngMemberBtn = (
+    <div>
+      <a href={() => false} id="custom-login-btn">
+        <Link to="/mngmember">
+          <Button
+            icon={<SettingOutlined />}
+            size="large"
+            style={{ width: "200px", marginTop: "10px" }}
+          >
+            관리페이지
+          </Button>
+        </Link>
+      </a>
+    </div>
+  );
+
   // Popover Text 관리
-  const text = <div style={myInfo}>Info</div>;
+  const text = (
+    <div style={{ textAlign: "center", fontFamily: "Jua", fontSize: "20px" }}>
+      Info
+    </div>
+  );
   const content = (
     <div className="profileContainer">
       <div className="OuterBox">
@@ -114,12 +144,17 @@ function Header() {
         </div>
       </div>
       <div id="myPage">
-        <Button icon={<MehOutlined />} size="large" style={btn}>
-          <Link to="/mypage">
-            <span> 마이페이지</span>
-          </Link>
-        </Button>
+        <Link to="/mypage">
+          <Button
+            icon={<MehOutlined />}
+            size="large"
+            style={{ width: "200px", marginTop: "10px" }}
+          >
+            마이페이지
+          </Button>
+        </Link>
       </div>
+      <div id="mngMember">{isAd === false ? "" : mngMemberBtn}</div>
       <div id="logout">
         {sessionStorage.getItem("auth") === "kakao"
           ? kakaoLogout
@@ -127,13 +162,6 @@ function Header() {
       </div>
     </div>
   );
-
-  // 로그인 버튼 CSS
-  const btnCSS = {
-    backgroundColor: "#f4f4f4",
-    color: "#012758",
-    borderColor: "#f4f4f4",
-  };
 
   // 비 로그인 상태의 로그인뷰
   const loginView_notLogin = (
@@ -144,7 +172,11 @@ function Header() {
             onClick={showModal}
             icon={<UserOutlined />}
             size="large"
-            style={btnCSS}
+            style={{
+              backgroundColor: "#f4f4f4",
+              color: "#012758",
+              borderColor: "#f4f4f4",
+            }}
           >
             로그인
           </Button>
@@ -154,7 +186,10 @@ function Header() {
                 alt={"logo"}
                 src="./logo_Login.png"
                 width="192px"
-                style={login_view_logoStyle}
+                style={{
+                  display: "block",
+                  margin: "0px auto",
+                }}
               />
             }
             visible={isModalVisible}
@@ -164,15 +199,18 @@ function Header() {
             <p>
               {/* Google Login API */}
               <GoogleLogin
-                clientId={REACT_APP_GOOGLE_API_KEY}
+                clientId={process.env.REACT_APP_GOOGLE_API_KEY}
                 render={(renderProps) => (
-                  <a href="{() => false}" onClick={renderProps.onClick}>
+                  <a href={() => false} onClick={renderProps.onClick}>
                     <img
                       alt={"google"}
                       width="300px"
                       height="70px"
                       src="./images/snsLogin/google.png"
-                      style={login_view_logoStyle}
+                      style={{
+                        display: "block",
+                        margin: "0px auto",
+                      }}
                     />
                   </a>
                 )}
@@ -189,7 +227,10 @@ function Header() {
                 src="./images/snsLogin/naver.png"
                 width="300px"
                 height="70px"
-                style={login_view_logoStyle}
+                style={{
+                  display: "block",
+                  margin: "0px auto",
+                }}
               />
             </p>
           </Modal>
@@ -213,9 +254,13 @@ function Header() {
               onClick={showModal}
               icon={<UserOutlined />}
               size="large"
-              style={btnCSS}
+              style={{
+                backgroundColor: "#f4f4f4",
+                color: "#012758",
+                borderColor: "#f4f4f4",
+              }}
             >
-              내정보
+              내 정보
             </Button>
           </Popover>
         </div>
@@ -236,9 +281,9 @@ function Header() {
               {/* <!-- LOGO --> */}
               <div className="col-md-3">
                 <div className="header-logo">
-                  <a href="/" className="logo">
+                  <Link to="/" className="logo">
                     <img alt={"logo"} src="./logo.png" width="192px" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* <!-- /LOGO --> */}

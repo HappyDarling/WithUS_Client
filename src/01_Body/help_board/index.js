@@ -3,16 +3,9 @@ import React, { useEffect } from "react";
 import useState from "react-usestateref";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
-import { Row, Col, Card, Avatar } from "antd";
-import { Pagination } from "antd";
-import {
-  ReadOutlined,
-  CheckOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { Card, Avatar, Button, Pagination } from "antd";
+import { ReadOutlined, CheckOutlined } from "@ant-design/icons";
+import matchingUser from "../../module/matchingUser";
 const { Meta } = Card;
 
 function HelpBoardPage() {
@@ -26,7 +19,7 @@ function HelpBoardPage() {
   function pageSearch() {
     axios
       .get(
-        `${process.env.REACT_APP_Backend_Server}ndhelp?board_category=${categoryRef.current}&page=${pageRef.current}&keyword=`
+        `${process.env.REACT_APP_Backend_Server}ndhelp?board_category=${categoryRef.current}&page=${pageRef.current}`
       )
       .then(function (result) {
         // 결과의 포스트 리스트를 추출할 수 있는 변수
@@ -52,6 +45,7 @@ function HelpBoardPage() {
         <div id="categories">
           <div id="categories-icon">
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("전체");
@@ -61,6 +55,7 @@ function HelpBoardPage() {
               <img src="./images/icon/icon_all.png" alt="전체" />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("노약자");
@@ -70,6 +65,7 @@ function HelpBoardPage() {
               <img src="./images/icon/icon_elderly.png" alt="노인" />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("장애인");
@@ -83,6 +79,7 @@ function HelpBoardPage() {
               />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("아동");
@@ -96,6 +93,7 @@ function HelpBoardPage() {
               />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("고독");
@@ -132,7 +130,18 @@ function HelpBoardPage() {
                     <Link to={`/read?id=${post.board_id}`}>
                       <ReadOutlined key="read" />
                     </Link>,
-                    <CheckOutlined key="check" />,
+                    <CheckOutlined
+                      key="check"
+                      // BoardID, needEmail, myEmail, CloseTF
+                      onClick={() => {
+                        matchingUser(
+                          post.board_id,
+                          post.board_ndid,
+                          sessionStorage.getItem("email"),
+                          post.board_close
+                        );
+                      }}
+                    />,
                   ]}
                   style={{
                     width: "30%",
