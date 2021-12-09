@@ -14,10 +14,13 @@ import RequireBoardPage from "./01_Body/require_board/index";
 import ManagePage from "./01_Body/manage_board/index";
 import Footer from "./02_Footer/footer/index";
 import KoChatBot from "./03_Bot/KoChatBot/index";
+import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
-import { Affix, Button } from "antd";
+import { Affix, Button, Popover } from "antd";
 
 function App() {
+  const [bot, setBot] = useState(false);
+
   return (
     <div>
       <div id="header">
@@ -70,16 +73,30 @@ function App() {
           <Route exact path={"/mngmember"}>
             <ManagePage />
           </Route>
-          {/* 챗봇 페이지 */}
-          <Route exact path={"/kochat"}>
-            <KoChatBot />
-          </Route>
         </Switch>
       </div>
       <Affix offsetBottom={10} style={{ position: "absolute", right: 10 }}>
-        <Button type="primary" onClick={() => console.log("TALKBOT CLICK")}>
-          TALKBOT
-        </Button>
+        <Popover
+          placement="topRight"
+          trigger="click"
+          content={
+            <div style={{ width: "450px", height: "500px" }}>
+              <KoChatBot />
+            </div>
+          }
+        >
+          <Button
+            type="primary"
+            onClick={() => {
+              if (bot === false) {
+                window.greet();
+                setBot(true);
+              }
+            }}
+          >
+            TALKBOT
+          </Button>
+        </Popover>
       </Affix>
       <div id="footer">
         <Footer />

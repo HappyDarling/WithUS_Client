@@ -1,8 +1,47 @@
 import "./index.css";
-import { Table, Badge, Space, Button } from "antd";
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
+import useState from "react-usestateref";
+import { Table, Button } from "antd";
+import { deleteUser } from "../../API/deleteUser";
+require("dotenv");
 
 function IndexPage() {
+  const [totalPage, setTotalPage, totalPageRef] = useState(0);
+  const [pageNum, setPageNum, pageNumRef] = useState(0);
+  const [userList, setUserList, userListRef] = useState([]);
+
+  function userPagenation() {
+    axios
+      .get(
+        `${process.env.REACT_APP_Backend_Server_User}api/admin/user?page=${pageNumRef.current}`
+      )
+      .then(function (result) {
+        console.log(result);
+        var userMap = [];
+        result.data.content.map(function (post, index) {
+          userMap.push({
+            key: index,
+            idx: post.idx,
+            name: post.name,
+            email: post.email,
+            birth: post.birth,
+            iot: post.iot,
+            dpScore: post.dpScore,
+          });
+        });
+
+        console.log(userMap);
+        setTotalPage(result.data.totalPages);
+        setUserList(userMap);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
+  useEffect(userPagenation, []);
+
   //회원 정보 (컬럼)
   const columns_meminfo = [
     {
@@ -16,7 +55,7 @@ function IndexPage() {
       dataIndex: "name",
       key: "name",
       align: "center",
-      render: (text) => <a>{text}</a>,
+      render: (text) => <a href={() => false}>{text}</a>,
     },
     {
       title: "이메일",
@@ -45,32 +84,7 @@ function IndexPage() {
         compare: (a, b) => a.dpScore - b.dpScore,
       },
     },
-    {
-      /*
-      title: '회원 관리',
-      key: 'deleteMember',
-      align: 'center',
-      render: (text, record) => (
-        <a>회원 삭제</a>
-      ),
-      */
-    },
   ];
-
-  //예시 데이터
-  const data_meminfo = [];
-  for (let i = 0; i < 12; ++i) {
-    //i는 회원의 수
-    data_meminfo.push({
-      key: i,
-      idx: i + 1,
-      name: "김테스트",
-      email: "123@gmail.com",
-      birth: "1983/09/12",
-      iot: "Y",
-      dpScore: 76,
-    });
-  }
 
   //체크박스가 있는 테이블
   class App extends React.Component {
@@ -79,11 +93,22 @@ function IndexPage() {
     };
 
     //onClick시 회원 삭제하는 메서드
-    /*
     delete = () => {
-      
+      Promise.allSettled(
+        this.state.selectedRowKeys.map(function (item, index) {
+          return deleteUser(userList[item].email);
+        })
+      )
+        .then((res) => {
+          console.log(res);
+          alert(`정상적으로 삭제가 완료되었습니다.`);
+          window.history.go(0);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("회원 삭제 진행 중 오류가 발생하였습니다.");
+        });
     };
-    */
 
     onSelectChange = (selectedRowKeys) => {
       console.log("selectedRowKeys changed: ", selectedRowKeys);
@@ -121,13 +146,16 @@ function IndexPage() {
           <Table
             rowSelection={rowSelection}
             columns={columns_meminfo}
-            dataSource={data_meminfo}
+            dataSource={userList}
             pagination={{
-              defaultCurrent: 1,
-              pageSize: 5,
+              defaultCurrent: pageNum + 1,
+              pageSize: 12,
+              total: totalPage * 12,
               /*페이지네이션 */
               onChange: (page) => {
-                console.log(page);
+                setPageNum(page - 1);
+                userPagenation();
+                console.log(pageNumRef.current);
               },
             }}
           />
@@ -135,75 +163,6 @@ function IndexPage() {
       );
     }
   }
-
-  //회원 정보 아래에 회원이 쓴 게시글 관리할 수 있는 테이블
-  /*
-  function NestedTable() {
-    const expandedRowRender = () => {
-      const columns_memboard = [
-        { title: '번호', dataIndex: 'board_id', key: 'board_id', align: 'center' },
-        { title: '글 제목', dataIndex: 'board_title', key: 'board_title', align: 'center' },
-        { title: '작성일시', dataIndex: 'board_event_time', key: 'board_event_time', align: 'center' },
-        {
-          title: '글 삭제',
-          dataIndex: 'delete',
-          key: 'delete',
-          align: 'center',
-          render: () => (
-            <Space size="middle">
-              <a>삭제</a>
-            </Space>
-          ),
-        },
-        {
-          title: '삭제여부',
-          key: 'board_deleteYN',
-          align: 'center',
-          render: () => (
-            <span>
-              <Badge status="success" />
-              deleted
-            </span>
-          ),
-        },
-      ];
-  
-      const data_memboard = [
-        {
-          board_id: 1,
-          board_title: '한강진역 근처 / 일일돌봄 필요',
-          board_event_time: '2021-12-02 03:33:12',
-        },
-      ];
-      return (
-        <Table
-          columns={columns_memboard}
-          dataSource={data_memboard}
-          pagination={false}
-        />
-      );
-    };
-    
-    return (
-      <Table
-        className="components-table-demo-nested"
-        columns={columns_meminfo}
-        expandable={{ expandedRowRender }}
-        dataSource={data_meminfo}
-        //페이지네이션
-        pagination={{
-          defaultCurrent: 1,
-          total: 10,
-          pageSize: 5,            
-            onChange: (page) => {
-              console.log(page);
-            }
-          }          
-        }     
-      />
-    );
-  }
-  */
 
   //우울증 점수로 정렬(오름차순, 내림차순, 정렬취소)
   function onSort(pagination, filters, sorter, extra) {

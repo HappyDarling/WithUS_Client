@@ -87,22 +87,15 @@ function setUserName(username) {
   }
 }
 
-function requestChat(messageText, url_pattern) {
+function requestChat(messageText) {
   $.ajax({
-    url:
-      "http://0.0.0.0:8080/" + url_pattern + "/" + userName + "/" + messageText,
-    type: "GET",
+    url: "http://ec2-18-189-80-190.us-east-2.compute.amazonaws.com:5000/chat",
+    type: "POST",
+    contentType: "application/json; charset=utf-8",
+    data: JSON.stringify({ user_email: userName, user_chat: messageText }),
     dataType: "json",
     success: function (data) {
-      state = data["state"];
-
-      if (state === "SUCCESS") {
-        return sendMessage(data["answer"], "left");
-      } else if (state === "REQUIRE_LOCATION") {
-        return sendMessage("어느 지역을 알려드릴까요?", "left");
-      } else {
-        return sendMessage("죄송합니다. 무슨말인지 잘 모르겠어요.", "left");
-      }
+      return sendMessage(data.reply, "left");
     },
 
     error: function (request, status, error) {
@@ -132,10 +125,8 @@ function onSendButtonClicked() {
       setTimeout(function () {
         return sendMessage("그렇군요. 알겠습니다!", "left");
       }, 1000);
-    } else if (state.includes("REQUIRE")) {
-      return requestChat(messageText, "fill_slot");
     } else {
-      return requestChat(messageText, "request_chat");
+      return requestChat(messageText);
     }
   }
 }

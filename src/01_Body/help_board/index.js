@@ -46,6 +46,7 @@ function HelpBoardPage() {
         <div id="categories">
           <div id="categories-icon">
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("전체");
@@ -55,6 +56,7 @@ function HelpBoardPage() {
               <img src="./images/icon/icon_all.png" alt="전체" />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("노약자");
@@ -64,6 +66,7 @@ function HelpBoardPage() {
               <img src="./images/icon/icon_elderly.png" alt="노인" />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("장애인");
@@ -77,6 +80,7 @@ function HelpBoardPage() {
               />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("아동");
@@ -90,6 +94,7 @@ function HelpBoardPage() {
               />
             </a>
             <a
+              href={() => false}
               className="icon"
               onClick={() => {
                 setCategory("고독");

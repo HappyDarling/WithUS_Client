@@ -4,9 +4,11 @@ require("dotenv");
 const requireFieldCheck = (email) => {
   return new Promise(function (resolve, reject) {
     var res = SyncRequest(
-      "POST",
-      `${process.env.REACT_APP_Backend_Server_User}/${email}`
+      "GET",
+      `${process.env.REACT_APP_Backend_Server_User}api/user/${email}`
     );
+
+    console.log(res);
 
     if (res.status === 200) {
       resolve(true);

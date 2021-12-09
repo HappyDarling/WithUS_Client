@@ -187,6 +187,7 @@ function IndexPage() {
                 {postDetail.board_event_time}
                 <Dropdown overlay={menu} placement="bottomRight">
                   <a
+                    href={() => false}
                     className="ant-dropdown-link"
                     onClick={(e) => e.preventDefault()}
                   >

@@ -44,13 +44,13 @@ function WritePage() {
     // 사이트를 이용하기 위한 필수 Field들이 서버에 있는지 체크
     requireFieldCheck(sessionStorage.getItem("email"))
       .then((res) => {
-        console.log("res");
+        console.log(res);
       })
       .catch((err) => {
         alert(
           "사이트를 이용하기 위한 필수 값이 입력 되어있지 않아 입력 페이지로 이동합니다."
         );
-        window.location.href = "/require";
+        // window.location.href = "/require";
         return;
       });
   });

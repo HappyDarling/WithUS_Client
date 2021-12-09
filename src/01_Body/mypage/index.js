@@ -16,7 +16,7 @@ import {
 } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 
-function IndexPage() {
+function MyPage() {
   //예시데이터 (게시글)
   const post_detail = {
     board_id: 1,
@@ -65,7 +65,7 @@ function IndexPage() {
 
   const options = [
     { label: "전체", value: "전체" },
-    { label: "모집", value: "모집" },
+    { label: "요청", value: "요청" },
     { label: "지원", value: "지원" },
   ];
 
@@ -261,7 +261,10 @@ function IndexPage() {
           <RadioBtn />
         </div>
         <List
-          style={{ backgroundColor: "#fff", padding: "20px" }}
+          style={{
+            backgroundColor: "#fff",
+            padding: "20px",
+          }}
           itemLayout="vertical"
           size="large"
           pagination={{
@@ -312,4 +315,4 @@ function IndexPage() {
   );
 }
 
-export default IndexPage;
+export default MyPage;
