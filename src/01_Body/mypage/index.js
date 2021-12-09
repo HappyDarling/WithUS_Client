@@ -1,16 +1,17 @@
 import "./index.css";
 import React from "react";
-import { Image, Switch, List, Avatar, Menu, Dropdown, Radio, Modal, Button, Input, Form, DatePicker } from 'antd';
-import { MoreOutlined } from '@ant-design/icons';
+import { Image, Switch, List, Avatar, Menu, Dropdown, Radio, Modal, Button, Input, Form, DatePicker, Tag } from 'antd';
+import { MoreOutlined, CheckCircleOutlined, CarryOutOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 function MyPage() {
 
   //예시데이터 (게시글)
+  
   const post_detail = {
     board_id: 1,
     board_writer: '김테스트',
     board_title: '제에에에목',
-    board_content: '서울역 근처에서 이틀간 노인 돌봄이 필요합니다.',
+    board_content: '서울역 근처에서 이틀간 노인 돌봄이 필요합니다. 2021년 12월 10 ~ 11일 이틀간 오전 9시부터 오후 7시 까지 도와주실 수 있으신 분의 도움을 기다립니다.',
     board_event_time: '2021-12-03 02:35:11',
     board_start_date: '2021-12-10',
     board_end_date: '2021-12-11',
@@ -18,7 +19,7 @@ function MyPage() {
     board_lat: 37.554722,
     board_lng: 126.970833,
     //위치(board_addr, board_region1Depth, board_region2Depth)
-  } 
+  }
 
   const listData = [];
   for (let i = 0; i < 10; i++) {
@@ -32,7 +33,7 @@ function MyPage() {
         post_detail.board_content,
     });
   }
-
+  
   //예시 데이터 (유저)
   const mypage_info = {
     idx: 1,
@@ -43,25 +44,28 @@ function MyPage() {
     iot: 'Y',
   }
 
+  //iot 토글 버튼 활성화
   function onChange(checked) {
     console.log(`switch to ${checked}`);
   }
 
+  //iot 신청 안한 사람은 토글버튼 사용 못함 (disabled)
   const [disabled, setDisabled] = React.useState(true);
 
   const toggle = () => {
     setDisabled(!disabled);
   };
 
+  //라디오 버튼 옵션
   const options = [
-    { label: '전체', value: '전체' },
-    { label: '요청', value: '요청' },
-    { label: '지원', value: '지원' },
+    { label: '전체', value: 'all' },
+    { label: '요청', value: 'ndhelp' },
+    { label: '지원', value: 'gvhelp' },
   ];  
 
   class RadioBtn extends React.Component {
     state = {
-      value: '전체'
+      value: 'all'
     };
 
     onRadioChange = e => {
@@ -85,6 +89,7 @@ function MyPage() {
     }
   } 
 
+  //프로필 수정
   class ProfileModify extends React.Component {
     state = {
       visible: false,
@@ -239,47 +244,154 @@ function MyPage() {
     );
   }
 
-  function MyPost() {
+  //상태 알려주는 태그 (상태에 따라 다른 태그를 띄움)
+  function PostTag() {
     return (
-      <div id="mypost-div">
-        <div id="mypost-radiobtn-div">
-          <RadioBtn />
-        </div>        
-        <List
-          style={{
-            backgroundColor:'#fff',
-            padding:'20px'
-          }}
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: page => {
-              console.log(page);
-            },
-            pageSize: 3,
-          }}
-          dataSource={listData}
-          renderItem={item => (
-            <List.Item
-              key={item.title}
-              extra={
+      <>
+        {/*내가 올린 글 (도움 요청)*/}
+        <Tag icon={<ClockCircleOutlined />} color="processing">모집중</Tag>
+        <Tag icon={<CheckCircleOutlined />} color="default">모집완료</Tag>
+        {/*내가 지원한 글 (도움 지원)*/}
+        <Tag icon={<ClockCircleOutlined />} color="gold">요청 대기중</Tag>
+        <Tag icon={<CarryOutOutlined />} color="success">지원 완료</Tag>
+      </>
+    );
+  }
+
+  //전체 리스트
+  function AllList() {
+    return (
+      <List
+        style={{
+          backgroundColor:'#fff',
+          padding:'20px'
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          pageSize: 3,
+        }}
+        dataSource={listData}
+        renderItem={item => (
+          <List.Item
+            key={item.title}
+            extra={
+              <>
                 <img
                   width={'200px'}
                   alt="logo"
                   src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
                 />
-              }
-            >            
-            <List.Item.Meta
-              avatar={<Avatar src={item.avatar} />}
-              title={<a href={item.href}>{item.title}</a>}
-              description={item.description}
-            />
-            {item.content}
-            </List.Item>
-          )}
-        />                
-      </div>
+                <div id="volunteerer-info-btn">
+                  <Button size="small">
+                    지원자 정보
+                  </Button>
+                </div>
+              </>
+            }
+          >            
+          <List.Item.Meta
+            avatar={<Avatar src={item.avatar} />}
+            //상태에 따라 다른 태그가 보임 (<PostTag />)
+            title={<a href={item.href}>{item.title}&nbsp;&nbsp;&nbsp;<PostTag /></a>}
+            description={item.description}
+          />
+          {item.content}                    
+          </List.Item>          
+        )}
+      />
+    );
+  }
+
+  //도움 요청 리스트
+  function NdHelpList() {
+    return (
+      <List
+        style={{
+          backgroundColor:'#fff',
+          padding:'20px'
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          pageSize: 3,
+        }}
+        dataSource={listData}
+        renderItem={item => (
+          <List.Item
+            key={item.title}
+            extra={
+              <>
+                <img
+                  width={'200px'}
+                  alt="logo"
+                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                />
+                <div id="volunteerer-info-btn">
+                  <Button size="small">
+                    지원자 정보
+                  </Button>
+                </div>
+              </>
+            }
+          >            
+          <List.Item.Meta
+            avatar={<Avatar src={item.avatar} />}
+            //상태에 따라 다른 태그가 보임 (<PostTag />)
+            title={<a href={item.href}>{item.title}&nbsp;&nbsp;&nbsp;<PostTag /></a>}
+            description={item.description}
+          />
+          {item.content}                    
+          </List.Item>          
+        )}
+      />
+    );
+  }
+
+  //도움 지원 리스트
+  function GvHelpList() {
+    return (
+      <List
+        style={{
+          backgroundColor:'#fff',
+          padding:'20px'
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          pageSize: 3,
+        }}
+        dataSource={listData}
+        renderItem={item => (
+          <List.Item
+            key={item.title}
+            extra={
+              <img
+                width={'200px'}
+                alt="logo"
+                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+              />
+            }
+          >            
+          <List.Item.Meta
+            avatar={<Avatar src={item.avatar} />}
+            //상태에 따라 다른 태그가 보임 (<PostTag />)
+            title={<a href={item.href}>{item.title}&nbsp;&nbsp;&nbsp;<PostTag /></a>}
+            description={item.description}
+          />
+          {item.content}                    
+          </List.Item>          
+        )}
+      />
     );
   }
 
@@ -291,8 +403,14 @@ function MyPage() {
           <div id="mypage-layout-left">
             <Profile />
           </div>
-          <div id="mypage-layout-right">            
-            <MyPost />
+          <div id="mypage-layout-right">           
+            <div id="mypost-div">
+              <div id="mypost-radiobtn-div">
+                <RadioBtn />
+              </div>
+              {/*라디오 버튼에 따라 다른 리스트 보여줌 (AllList, NdHelpLsit, GvHelpList*/}       
+              <AllList />
+            </div>
           </div>       
         </div>
       </div>
