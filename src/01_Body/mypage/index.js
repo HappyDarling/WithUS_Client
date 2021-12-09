@@ -1,9 +1,13 @@
 import "./index.css";
 import axios from "axios";
 import SyncRequest from "sync-request";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import useState from "react-usestateref";
+import { volunteerAccept } from "../../API/volunteerAD";
 import convertMonth from "../../module/convertMonth";
 import {
+  Descriptions,
+  Drawer,
   Image,
   Switch,
   List,
@@ -16,17 +20,129 @@ import {
   Input,
   Form,
   DatePicker,
+  Tag,
 } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import {
+  MoreOutlined,
+  CheckCircleOutlined,
+  CarryOutOutlined,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
 
 function MyPage() {
-  var [name, setName] = useState("");
-  var [email, setEmail] = useState("");
-  var [birth, setBirth] = useState("");
-  var [sex, setSex] = useState("");
-  var [iot, setIot] = useState(false);
+  const [postList, setPostList] = useState([]);
+
+  const [mode, setMode, modeRef] = useState("ndlog");
+  const [page, setPage, pageRef] = useState(1);
+  const [totalPage, setTotalPage, totalPageRef] = useState(1);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [birth, setBirth] = useState("");
+  const [sex, setSex] = useState("");
+  const [iot, setIot] = useState(false);
+
+  const [visible, setVisible] = useState(false);
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  function postSearch() {
+    axios
+      .get(
+        `${
+          process.env.REACT_APP_Backend_Server
+        }mypage/log?userid=${sessionStorage.getItem("email")}&mode=${
+          modeRef.current
+        }&page=${pageRef.current}`
+      )
+      .then(function (result) {
+        console.log(result.data);
+
+        try {
+          setTotalPage(result.data[0].totalnum);
+        } catch (err) {
+          setTotalPage(1);
+          console.log(err);
+        }
+
+        var postMap = [];
+        result.data.map(function (post, index) {
+          postMap.push({
+            id: post.board_id,
+            gvId: post.board_gvid,
+            href: `/read?id=${post.board_id}`, //해당 게시글(상세페이지)로 이동
+            title: post.board_title,
+            avatar: "https://joeschmoe.io/api/v1/random",
+            description: post.board_event_time,
+            content: post.board_content,
+            close: post.board_close,
+            // board_writer: post.board_writer,
+            // board_title: post.board_title,
+            // board_content: post.board_content,
+            // board_event_time: post.board_event_time,
+            // board_start_date: post.board_start_date,
+            // board_end_date: post.board_end_date,
+            // board_category: post.board_category,
+            // board_lat: post.board_lat,
+            // board_lng: post.board_lng,
+          });
+        });
+
+        setPostList(postMap);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
+  const [boardEmail, setBoardEmail, boardEmailRef] = useState("");
+  const [boardClose, setBoardClose, boardCloseRef] = useState("1");
+  const [gvEmail, setGvEmail, gvEmailRef] = useState("");
+  const [gvName, setGvName] = useState("");
+  const [gvAddr, setGvAddr] = useState("");
+  const [gvSex, setGvSex] = useState("");
+  const [gvBirth, setGvBirth] = useState("");
+
+  function volunteerSearch() {
+    axios
+      .get(
+        `${process.env.REACT_APP_Backend_Server_User}api/user/fbe/${gvEmailRef.current}`
+      )
+      .then((res) => {
+        console.log(res);
+        try {
+          setGvName(res.data.name);
+          setGvAddr(res.data.addr);
+          setGvSex(res.data.sex);
+          setGvBirth(
+            res.data.birth.split(" ")[3] +
+              "/" +
+              convertMonth(res.data.birth.split(" ")[1]) +
+              "/" +
+              res.data.birth.split(" ")[2]
+          );
+        } catch (err) {
+          alert("지원자 정보를 불러오는 중 오류가 발생하였습니다.");
+          console.error(err);
+          setGvName("");
+          setGvAddr("");
+          setGvSex("");
+          setGvBirth("");
+        }
+      })
+      .catch((err) => {
+        setGvName("-");
+        setGvAddr("-");
+        setGvSex("-");
+        setGvBirth("-");
+      });
+  }
 
   useEffect(function () {
+    postSearch();
+
     var res = SyncRequest(
       "GET",
       `${
@@ -47,33 +163,7 @@ function MyPage() {
         "/" +
         JSON.parse(res.body).birth.split(" ")[2]
     );
-  });
-
-  //예시데이터 (게시글)
-  const post_detail = {
-    board_id: 1,
-    board_writer: "김테스트",
-    board_title: "제에에에목",
-    board_content: "서울역 근처에서 이틀간 노인 돌봄이 필요합니다.",
-    board_event_time: "2021-12-03 02:35:11",
-    board_start_date: "2021-12-10",
-    board_end_date: "2021-12-11",
-    board_category: "노인",
-    board_lat: 37.554722,
-    board_lng: 126.970833,
-    //위치(board_addr, board_region1Depth, board_region2Depth)
-  };
-
-  const listData = [];
-  for (let i = 0; i < 10; i++) {
-    listData.push({
-      href: "#", //해당 게시글(상세페이지)로 이동
-      title: post_detail.board_title,
-      avatar: "https://joeschmoe.io/api/v1/random",
-      description: post_detail.board_event_time,
-      content: post_detail.board_content,
-    });
-  }
+  }, []);
 
   function onChange(checked) {
     console.log(`switch to ${checked}`);
@@ -86,30 +176,30 @@ function MyPage() {
   };
 
   const options = [
-    { label: "전체", value: "전체" },
     { label: "요청", value: "요청" },
     { label: "지원", value: "지원" },
   ];
 
   class RadioBtn extends React.Component {
-    state = {
-      value: "전체",
-    };
-
     onRadioChange = (e) => {
       console.log("radio checked", e.target.value);
-      this.setState({
-        value: e.target.value,
-      });
+
+      if (e.target.value === "요청") {
+        setMode("ndlog");
+      } else if (e.target.value === "지원") {
+        setMode("gvlog");
+      } else {
+      }
+
+      postSearch();
     };
 
     render() {
-      const { value } = this.state;
       return (
         <Radio.Group
           options={options}
           onChange={this.onRadioChange}
-          value={value}
+          value={modeRef.current === "ndlog" ? "요청" : "지원"}
           optionType="button"
           buttonStyle="solid"
         />
@@ -246,10 +336,7 @@ function MyPage() {
         <tr>
           <td colSpan="2" id="profile-table-img">
             {/*소셜 로그인의 프로필 사진*/}
-            <Image
-              width={"100%"}
-              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            />
+            <Image width={"100%"} src={sessionStorage.getItem("profileImg")} />
           </td>
         </tr>
         <tr>
@@ -294,60 +381,217 @@ function MyPage() {
     );
   }
 
-  function MyPost() {
+  const tag1 = (
+    <Tag icon={<ClockCircleOutlined />} color="processing">
+      모집중
+    </Tag>
+  );
+
+  const tag2 = (
+    <Tag icon={<ClockCircleOutlined />} color="gold">
+      요청 대기중
+    </Tag>
+  );
+
+  const tag3 = (
+    <Tag icon={<CheckCircleOutlined />} color="default">
+      모집완료
+    </Tag>
+  );
+
+  const tag4 = (
+    <Tag icon={<CarryOutOutlined />} color="success">
+      지원 완료
+    </Tag>
+  );
+
+  //도움 요청 리스트
+  function NdHelpList() {
     return (
-      <div id="mypost-div">
-        <div id="mypost-radiobtn-div">
-          <RadioBtn />
-        </div>
-        <List
-          style={{
-            backgroundColor: "#fff",
-            padding: "20px",
-          }}
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
-            pageSize: 3,
-          }}
-          dataSource={listData}
-          renderItem={(item) => (
-            <List.Item
-              key={item.title}
-              extra={
+      <List
+        style={{
+          backgroundColor: "#fff",
+          padding: "20px",
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: (this_page) => {
+            setPage(this_page);
+            console.log(pageRef.current);
+            postSearch();
+          },
+          defaultCurrent: pageRef.current,
+          pageSize: 3,
+          total: totalPageRef.current,
+        }}
+        dataSource={postList}
+        renderItem={(item) => (
+          <List.Item
+            key={item.title}
+            extra={
+              <>
                 <img
                   width={"200px"}
                   alt="logo"
                   src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
                 />
+                <div id="volunteer-info-btn">
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      setVisible(true);
+                      setBoardEmail(item.id);
+                      setBoardClose(item.close);
+                      setGvEmail(item.gvId);
+                      volunteerSearch();
+                    }}
+                  >
+                    지원자 정보
+                  </Button>
+                </div>
+              </>
+            }
+          >
+            <List.Item.Meta
+              avatar={<Avatar src={item.avatar} />}
+              //상태에 따라 다른 태그가 보임 (<PostTag />)
+              title={
+                <a href={item.href}>
+                  {item.title}&nbsp;&nbsp;&nbsp;
+                  {item.close === "1" ? tag1 : item.close === "2" ? tag2 : tag3}
+                </a>
               }
-            >
-              <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
-              />
-              {item.content}
-            </List.Item>
-          )}
-        />
-      </div>
+              description={item.description}
+            />
+            {item.content}
+          </List.Item>
+        )}
+      />
     );
   }
+
+  //도움 지원 리스트
+  function GvHelpList() {
+    return (
+      <List
+        style={{
+          backgroundColor: "#fff",
+          padding: "20px",
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: (this_page) => {
+            setPage(this_page);
+            console.log(pageRef.current);
+            postSearch();
+          },
+          defaultCurrent: pageRef.current,
+          pageSize: 3,
+          total: totalPageRef.current,
+        }}
+        dataSource={postList}
+        renderItem={(item) => (
+          <List.Item
+            key={item.title}
+            extra={
+              <img
+                width={"200px"}
+                alt="logo"
+                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+              />
+            }
+          >
+            <List.Item.Meta
+              avatar={<Avatar src={item.avatar} />}
+              //상태에 따라 다른 태그가 보임 (<PostTag />)
+              title={
+                <a href={item.href}>
+                  {item.title}&nbsp;&nbsp;&nbsp;
+                  {tag4}
+                </a>
+              }
+              description={item.description}
+            />
+            {item.content}
+          </List.Item>
+        )}
+      />
+    );
+  }
+
+  const text = `
+  A dog is a type of domesticated animal.
+  Known for its loyalty and faithfulness,
+  it can be found as a welcome guest in many households across the world.
+`;
 
   return (
     <div id="mypage-back-color">
       {/* <!-- container --> */}
       <div className="container">
+        <Drawer
+          title="지원자 정보"
+          placement={"right"}
+          width={500}
+          onClose={onClose}
+          visible={visible}
+        >
+          <Descriptions title="상세 정보" layout="vertical" bordered>
+            <Descriptions.Item label="이름" span={3}>
+              {gvName}
+            </Descriptions.Item>
+            <Descriptions.Item label="주소" span={3}>
+              {gvAddr}
+            </Descriptions.Item>
+            <Descriptions.Item label="성별" style={{ width: "49%" }}>
+              {gvSex}
+            </Descriptions.Item>
+            <Descriptions.Item label="생일" style={{ width: "49%" }}>
+              {gvBirth}
+            </Descriptions.Item>
+          </Descriptions>
+
+          {boardCloseRef.current === "0" ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-around",
+                marginTop: "20px",
+              }}
+            >
+              <Button
+                size="large"
+                onClick="onReadPostBtn"
+                style={{ width: "100px" }}
+              >
+                거절
+              </Button>
+              <Button
+                type="primary"
+                size="large"
+                onClick={() => volunteerAccept(boardEmailRef.current)}
+                style={{ width: "100px" }}
+              >
+                수락
+              </Button>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </Drawer>
         <div className="mypage-wrapper">
           <div id="mypage-layout-left">
             <Profile />
           </div>
           <div id="mypage-layout-right">
-            <MyPost />
+            <div id="mypost-div">
+              <div id="mypost-radiobtn-div">
+                <RadioBtn />
+              </div>
+              {modeRef.current === "ndlog" ? <NdHelpList /> : <GvHelpList />}
+            </div>
           </div>
         </div>
       </div>
