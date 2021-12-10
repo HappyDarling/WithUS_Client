@@ -14,50 +14,64 @@ function IotApplyFieldPage() {
 
   // 게시글 등록 Submit 함수
   const onPostFinish = (values) => {
-    if (addr1 === "") {
-    }
-    // 주소 좌표 얻는 메서드
-    var res = SyncRequest(
-      "POST",
-      `${
-        process.env.REACT_APP_PROXY
-      }http://api.vworld.kr/req/address?service=address&request=getcoord&address=${encodeURI(
-        addr1
-      )}&type=road&key=${process.env.REACT_APP_VWorld_API_KEY}`
-    );
+    if (addr1 !== "") {
+      // 주소 좌표 얻는 메서드
+      var res = SyncRequest(
+        "POST",
+        `${
+          process.env.REACT_APP_PROXY
+        }http://api.vworld.kr/req/address?service=address&request=getcoord&address=${encodeURI(
+          addr1
+        )}&type=road&key=${process.env.REACT_APP_VWorld_API_KEY}`
+      );
 
-    if (JSON.parse(res.body).response.status === "OK") {
-      const data = {
-        name: values.username,
-        birth: values.birth._d.toString(),
-        lat: JSON.parse(res.body).response.result.point.y.toString(),
-        lng: JSON.parse(res.body).response.result.point.x.toString(),
-        addr: addr1 + "/" + values.addr2,
-        region1Depth: JSON.parse(res.body).response.refined.structure.level1,
-        region2Depth: JSON.parse(res.body).response.refined.structure.level2,
-        sex: values.gender,
-      };
-      console.log(data);
-      axios
-        .put(
-          `${
-            process.env.REACT_APP_Backend_Server_User
-          }api/user/update/${sessionStorage.getItem("email")}`,
-          data,
-          {
-            headers: { "Content-Type": `application/json` },
-          }
-        )
-        .then(function (result) {
-          alert("정상적으로 내 정보 저장이 완료되었습니다!");
-          window.location.href = "/";
-        })
-        .catch(function (error) {
-          alert("정보 저장 중 오류가 발생하였습니다.");
-          console.error(error);
-        });
+      if (JSON.parse(res.body).response.status === "OK") {
+        const data = {
+          lat: JSON.parse(res.body).response.result.point.y.toString(),
+          lng: JSON.parse(res.body).response.result.point.x.toString(),
+          addr: addr1 + "/" + values.addr2,
+          region1Depth: JSON.parse(res.body).response.refined.structure.level1,
+          region2Depth: JSON.parse(res.body).response.refined.structure.level2,
+        };
+        console.log(data);
+        axios
+          .put(
+            `${
+              process.env.REACT_APP_Backend_Server_User
+            }api/user/update/addr/${sessionStorage.getItem("email")}`,
+            data,
+            {
+              headers: { "Content-Type": `application/json` },
+            }
+          )
+          .then(function (result) {
+            alert("정상적으로 내 정보 저장이 완료되었습니다!");
+            axios
+              .put(
+                `${
+                  process.env.REACT_APP_Backend_Server_User
+                }api/user/registIot/${sessionStorage.getItem("email")}`
+              )
+              .then(function (result) {
+                console.log(result);
+                alert("정상적으로 IOT 서비스 신청이 완료되었습니다!");
+                window.location.href = "/";
+              })
+              .catch(function (error) {
+                alert("IOT 서비스 신청 중 오류가 발생하였습니다.");
+                console.error(error);
+              });
+          })
+          .catch(function (error) {
+            alert("정보 저장 중 오류가 발생하였습니다.");
+            console.error(error);
+          });
+      } else {
+        console.error(res.body);
+      }
     } else {
-      console.error(res.body);
+      alert("주소를 검색해주세요!");
+      return;
     }
   };
 

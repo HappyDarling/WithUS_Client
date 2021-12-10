@@ -41,6 +41,7 @@ function MyPage() {
   const [birth, setBirth] = useState("");
   const [sex, setSex] = useState("");
   const [iot, setIot] = useState(false);
+  const [disabled, setDisabled] = React.useState(true);
 
   const [visible, setVisible] = useState(false);
 
@@ -150,10 +151,13 @@ function MyPage() {
       }api/user/fbe/${sessionStorage.getItem("email")}`
     );
 
+    console.log(JSON.parse(res.body).iot);
+
     setName(JSON.parse(res.body).name);
     setEmail(JSON.parse(res.body).email);
     setSex(JSON.parse(res.body).sex);
     setIot(JSON.parse(res.body).iot);
+    setDisabled(!JSON.parse(res.body).iot);
 
     console.log(JSON.parse(res.body).birth.split(" "));
     setBirth(
@@ -168,8 +172,6 @@ function MyPage() {
   function onChange(checked) {
     console.log(`switch to ${checked}`);
   }
-
-  const [disabled, setDisabled] = React.useState(true);
 
   const toggle = () => {
     setDisabled(!disabled);
@@ -366,10 +368,10 @@ function MyPage() {
           </td>
         </tr>
         <tr>
-          <td id="profile-table-info-iot">IOT 신청여부 :&nbsp;{iot}</td>
+          <td id="profile-table-info-iot">IOT 신청여부 : {iot.toString()}</td>
           <td id="profile-table-info-bottom">
             <Switch
-              //disabled={disabled} //IOT 신청 안한 사람의 경우 disabled
+              disabled={disabled} //IOT 신청 안한 사람의 경우 disabled
               checkedChildren="IOT 켜짐"
               unCheckedChildren="IOT 꺼짐"
               defaultChecked

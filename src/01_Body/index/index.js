@@ -38,18 +38,21 @@ function IndexPage() {
       <div className="container">
         <div id="carousel">
           <Carousel autoplay>
-            <div>
-              <h3 style={contentStyle}>1</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>2</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>3</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>4</h3>
-            </div>
+            <img
+              src={
+                process.env.PUBLIC_URL + "/images/banners/slider_give_board.png"
+              }
+            />
+            <img
+              src={
+                process.env.PUBLIC_URL + "/images/banners/slider_help_board.png"
+              }
+            />
+            <img
+              src={
+                process.env.PUBLIC_URL + "/images/banners/slider_iot_apply.png"
+              }
+            />
           </Carousel>
         </div>
         <div id="help-card">

@@ -26,7 +26,7 @@ function IndexPage() {
             name: post.name,
             email: post.email,
             birth: post.birth,
-            iot: post.iot,
+            iot: post.iot.toString(),
             dpScore: post.dpScore,
           });
         });
