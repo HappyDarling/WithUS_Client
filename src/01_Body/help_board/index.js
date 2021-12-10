@@ -61,7 +61,7 @@ function HelpBoardPage() {
               href={() => false}
               className="icon"
               onClick={() => {
-                setCategory("노약자");
+                setCategory("노인");
                 pageSearch();
               }}
             >

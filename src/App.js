@@ -10,6 +10,7 @@ import WritePage from "./01_Body/help_board/write_board/index";
 import ReadPage from "./01_Body/help_board/read_board/index";
 import ModifyPage from "./01_Body/help_board/modify_board/index";
 import IotApplyPage from "./01_Body/iot_apply/index";
+import IotApplyFieldPage from "./01_Body/iot_apply/iot_apply_field/index";
 import RequireBoardPage from "./01_Body/require_board/index";
 import ManagePage from "./01_Body/manage_board/index";
 import Footer from "./02_Footer/footer/index";
@@ -68,6 +69,10 @@ function App() {
           {/* iot 신청 */}
           <Route exact path={"/apply"}>
             <IotApplyPage />
+          </Route>
+          {/* iot 신청 주소 입력 */}
+          <Route exact path={"/applyField"}>
+            <IotApplyFieldPage />
           </Route>
           {/* 회원 관리 페이지 */}
           <Route exact path={"/mngmember"}>

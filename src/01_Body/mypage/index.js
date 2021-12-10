@@ -553,7 +553,7 @@ function MyPage() {
             </Descriptions.Item>
           </Descriptions>
 
-          {boardCloseRef.current === "0" ? (
+          {boardCloseRef.current === "2" ? (
             <div
               style={{
                 display: "flex",
