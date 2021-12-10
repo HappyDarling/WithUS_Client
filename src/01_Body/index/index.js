@@ -9,13 +9,6 @@ require("dotenv");
 const { Meta } = Card;
 
 function IndexPage() {
-  const contentStyle = {
-    height: "240px",
-    color: "#fff",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-  };
 
   // 서버에서 게시글 목록을 받아오는 비동기 useEffect 구문
   const [postList, setPostList] = React.useState({ data: [] });
@@ -39,16 +32,19 @@ function IndexPage() {
         <div id="carousel">
           <Carousel autoplay>
             <div>
-              <h3 style={contentStyle}>1</h3>
+              <Link to="/ndhelp">
+                <img src="./images/slider_img/slider_help_board.png" alt="도움 요청으로 이동" style={{width:'100%'}} />
+              </Link>                               
             </div>
             <div>
-              <h3 style={contentStyle}>2</h3>
+              <Link to="/gvhelp">
+                <img src="./images/slider_img/slider_give_board.png" alt="도움 주기로 이동" style={{width:'100%'}} />
+              </Link>              
             </div>
             <div>
-              <h3 style={contentStyle}>3</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>4</h3>
+              <Link to="/apply">
+                <img src="./images/slider_img/slider_iot_apply.png" alt="도움 주기로 이동" style={{width:'100%'}} />
+              </Link> 
             </div>
           </Carousel>
         </div>

@@ -1,35 +1,26 @@
-/*=========================================================
-	03 -> Navigation
-===========================================================*/
-
 #navigation {
   background: #f4f4f4;
-  border-bottom: 1px solid #9aa1aa;
-  /*border-top: 3px solid #012758;*/
 }
 
 a {
   color: black;
 }
 
-/*----------------------------*\
-      Main nav
-  \*----------------------------*/
-
-.main-nav > li + li {
-  margin-left: 30px;
+.main-nav > li {
+  font-size: 17px;
 }
 
 .main-nav > li > a {
-  padding: 20px 0px;
+  padding: 15px 35px;
+  color: #4b4b4b;
 }
 
 .main-nav > li > a:hover,
 .main-nav > li > a:focus,
 .main-nav > li > a:active {
-  color: #012758;
+  color: #fff;
   font-weight: bold;
-  background-color: transparent;
+  background-color: #284770;
 }
 
 .main-nav > li > a:after {
@@ -37,7 +28,8 @@ a {
   display: block;
   width: 0%;
   height: 2px;
-  background-color: #012758;
+  margin-top: 3px;
+  background-color: #fff;
   -webkit-transition: 0.2s all;
   transition: 0.2s all;
 }
