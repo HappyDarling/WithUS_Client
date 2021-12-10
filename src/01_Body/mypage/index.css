@@ -32,7 +32,7 @@
   vertical-align: top;
 }
 
-#profile-table {
+#profile-table{
   border-radius: 30px;
   background-color: #fff;
 }
@@ -111,4 +111,9 @@
   padding-right: 5px;
   background-color: #fff;
   border-radius: 30px;
+}
+
+#volunteer-info-btn {
+  text-align: center;
+  margin-top: 15px;
 }

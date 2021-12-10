@@ -1,32 +1,45 @@
 import "./index.css";
-import { Button } from "antd";
+import { Button, Image } from 'antd';
 
-function IotApplyPage() {
+function IotAppplyPage() {
+
   return (
     <div>
       {/* <!-- container --> */}
-      <div className="container">
-        <div className="iot-wrapper">
-          <div id="iot-apply-title">
-            <p>IOT 신청하기</p>
-          </div>
+      <div className="container">        
+        <div id="iot-wrapper">          
           <div id="iot-introduce">
-            <div id="iot-img">
-              <img src="./images/iot_img.png" alt="iot 사진"></img>
+            <div id="iot-title">
+              <p>IOT 신청하기</p>
             </div>
-            <div id="iot-p">
-              <p>
-                이 iot를 설치하세요!
-                <br />
-                당신에게 도움이 될 것입니다.
+            <div id="iot-introduce-left">
+              <div id="iot-img">
+                <Image
+                  height={'400px'}
+                  src="./images/iot_img/iot_img.png"
+                />
+              </div>
+            </div>
+            <div id="iot-introduce-right">
+              <p id="iot-p">
+                iot 설명 1
+              </p>
+              <p id="iot-p">
+                iot 설명 2
+              </p>
+              <p id="iot-p">
+                iot 설명 3
+              </p>
+              <p id="iot-p">
+                iot 설명 4
               </p>
             </div>
           </div>
-          <div id="iot-apply-button">
+          <div id="iot-button">
             <Button
-              type="primary"
               //onClick={}
               size="large"
+              type="default"
             >
               <span>신청하기</span>
             </Button>
@@ -37,4 +50,4 @@ function IotApplyPage() {
   );
 }
 
-export default IotApplyPage;
+export default IotAppplyPage;

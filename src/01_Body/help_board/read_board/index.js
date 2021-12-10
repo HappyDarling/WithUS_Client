@@ -10,7 +10,7 @@ import { Button, Avatar, Image, Dropdown, Menu, Breadcrumb } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 var parse = require("url-parse");
 
-function IndexPage() {
+function ReadPage() {
   const [postDetail, setPostDetail] = useState({});
 
   useEffect(function () {
@@ -232,4 +232,4 @@ function IndexPage() {
   );
 }
 
-export default IndexPage;
+export default ReadPage;

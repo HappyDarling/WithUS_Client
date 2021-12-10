@@ -16,8 +16,9 @@ import {
   Input,
   Form,
   DatePicker,
+  Tag
 } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import { MoreOutlined, CheckCircleOutlined, CarryOutOutlined, ClockCircleOutlined } from "@ant-design/icons";
 
 function MyPage() {
   var [name, setName] = useState("");
@@ -294,47 +295,154 @@ function MyPage() {
     );
   }
 
-  function MyPost() {
+  //상태 알려주는 태그 (상태에 따라 다른 태그를 띄움)
+  function PostTag() {
     return (
-      <div id="mypost-div">
-        <div id="mypost-radiobtn-div">
-          <RadioBtn />
-        </div>
-        <List
-          style={{
-            backgroundColor: "#fff",
-            padding: "20px",
-          }}
-          itemLayout="vertical"
-          size="large"
-          pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
-            pageSize: 3,
-          }}
-          dataSource={listData}
-          renderItem={(item) => (
-            <List.Item
-              key={item.title}
-              extra={
+      <>
+        {/*내가 올린 글 (도움 요청)*/}
+        <Tag icon={<ClockCircleOutlined />} color="processing">모집중</Tag>
+        <Tag icon={<CheckCircleOutlined />} color="default">모집완료</Tag>
+        {/*내가 지원한 글 (도움 지원)*/}
+        <Tag icon={<ClockCircleOutlined />} color="gold">요청 대기중</Tag>
+        <Tag icon={<CarryOutOutlined />} color="success">지원 완료</Tag>
+      </>
+    );
+  }
+
+  //전체 리스트
+  function AllList() {
+    return (
+      <List
+        style={{
+          backgroundColor:'#fff',
+          padding:'20px'
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          pageSize: 3,
+        }}
+        dataSource={listData}
+        renderItem={item => (
+          <List.Item
+            key={item.title}
+            extra={
+              <>
                 <img
-                  width={"200px"}
+                  width={'200px'}
                   alt="logo"
                   src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
                 />
-              }
-            >
-              <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
+                <div id="volunteer-info-btn">
+                  <Button size="small">
+                    지원자 정보
+                  </Button>
+                </div>
+              </>
+            }
+          >            
+          <List.Item.Meta
+            avatar={<Avatar src={item.avatar} />}
+            //상태에 따라 다른 태그가 보임 (<PostTag />)
+            title={<a href={item.href}>{item.title}&nbsp;&nbsp;&nbsp;<PostTag /></a>}
+            description={item.description}
+          />
+          {item.content}                    
+          </List.Item>          
+        )}
+      />
+    );
+  }
+
+  //도움 요청 리스트
+  function NdHelpList() {
+    return (
+      <List
+        style={{
+          backgroundColor:'#fff',
+          padding:'20px'
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          pageSize: 3,
+        }}
+        dataSource={listData}
+        renderItem={item => (
+          <List.Item
+            key={item.title}
+            extra={
+              <>
+                <img
+                  width={'200px'}
+                  alt="logo"
+                  src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
+                />
+                <div id="volunteer-info-btn">
+                  <Button size="small">
+                    지원자 정보
+                  </Button>
+                </div>
+              </>
+            }
+          >            
+          <List.Item.Meta
+            avatar={<Avatar src={item.avatar} />}
+            //상태에 따라 다른 태그가 보임 (<PostTag />)
+            title={<a href={item.href}>{item.title}&nbsp;&nbsp;&nbsp;<PostTag /></a>}
+            description={item.description}
+          />
+          {item.content}                    
+          </List.Item>          
+        )}
+      />
+    );
+  }
+
+  //도움 지원 리스트
+  function GvHelpList() {
+    return (
+      <List
+        style={{
+          backgroundColor:'#fff',
+          padding:'20px'
+        }}
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          onChange: page => {
+            console.log(page);
+          },
+          pageSize: 3,
+        }}
+        dataSource={listData}
+        renderItem={item => (
+          <List.Item
+            key={item.title}
+            extra={
+              <img
+                width={'200px'}
+                alt="logo"
+                src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png"
               />
-              {item.content}
-            </List.Item>
-          )}
-        />
-      </div>
+            }
+          >            
+          <List.Item.Meta
+            avatar={<Avatar src={item.avatar} />}
+            //상태에 따라 다른 태그가 보임 (<PostTag />)
+            title={<a href={item.href}>{item.title}&nbsp;&nbsp;&nbsp;<PostTag /></a>}
+            description={item.description}
+          />
+          {item.content}                    
+          </List.Item>          
+        )}
+      />
     );
   }
 
@@ -346,9 +454,15 @@ function MyPage() {
           <div id="mypage-layout-left">
             <Profile />
           </div>
-          <div id="mypage-layout-right">
-            <MyPost />
-          </div>
+          <div id="mypage-layout-right">           
+            <div id="mypost-div">
+              <div id="mypost-radiobtn-div">
+                <RadioBtn />
+              </div>
+              {/*라디오 버튼에 따라 다른 리스트 보여줌 (AllList, NdHelpLsit, GvHelpList*/}       
+              <AllList />
+            </div>
+          </div>  
         </div>
       </div>
     </div>
