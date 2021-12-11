@@ -29,7 +29,10 @@
   text-align: center;
   font-family: "Jua", sans-serif;
   font-size: 28px;
-  margin-bottom: 10px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  color: #012758;
+  font-size: 40px;
 }
 
 #write-button {
